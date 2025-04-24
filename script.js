@@ -12,6 +12,7 @@ const despotism = ["Absolute Monarchy", "Constitutional Dictatorship", "Constitu
 const reactionaryism = ["Aristocratic Reaction", "Esoteric Reactionism", "Reactionary Populism", "Religious Fundamentalism"]
 const subideologyGroups = [accelerationism, anarchism, vanguardSocialism, popularSocialism, revisionistSocialism, progressivism, liberalism, conservatism, polyarchy, despotism, reactionaryism]
 const colors = ["#f8f8f8", "#a4946e", "#c3350a", "#ec494c", "#ffae43", "#f87f9d", "#f6e86f", "#7197ff", "#6e6e6e", "#292929", "#8046a4"]
+
 function setupImageUpload(buttonId, targetId) {
     document.getElementById(buttonId).addEventListener("click", () => {
         const input = document.createElement("input")
@@ -23,6 +24,8 @@ function setupImageUpload(buttonId, targetId) {
                 reader.onload = event => {
                     const target = document.getElementById(targetId)
                     target.style.backgroundImage = `url(${event.target.result})`
+                    target.style.backgroundSize = "cover"
+                    target.style.backgroundPosition = "center"
                 }
                 reader.readAsDataURL(e.target.files[0])
             }
@@ -33,44 +36,42 @@ function setupImageUpload(buttonId, targetId) {
 setupImageUpload("flagUpload", "flag")
 setupImageUpload("portraitUpload", "portrait")
 setupImageUpload("focusUpload", "focusIcon")
+
 function setupImageEdit(buttonId, targetId) {
     document.getElementById(buttonId).addEventListener("click", () => {
         const target = document.getElementById(targetId)
-        const currentSize = getComputedStyle(target).backgroundSize
-        target.style.backgroundSize = currentSize.includes("cover") ? "contain" : "cover"
+        target.style.backgroundSize = getComputedStyle(target).backgroundSize.includes("cover") ? "contain" : "cover"
     })
 }
 setupImageEdit("flagEdit", "flag")
 setupImageEdit("portraitEdit", "portrait")
 setupImageEdit("focusEdit", "focusIcon")
+
 function setupImageReset(buttonId, targetId) {
     document.getElementById(buttonId).addEventListener("click", () => {
-        const target = document.getElementById(targetId)
-        target.style.backgroundImage = "none"
+        document.getElementById(targetId).style.backgroundImage = "none"
     })
 }
 setupImageReset("flagReset", "flag")
 setupImageReset("portraitReset", "portrait")
 setupImageReset("focusReset", "focusIcon")
-editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus"]
+
+const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus"]
 editableDivs.forEach(divId => {
     const div = document.getElementById(divId)
     div.addEventListener("click", function () {
-        makeEditable(this)
+        this.setAttribute("contenteditable", "plaintext-only")
+        this.focus()
+        const range = document.createRange()
+        range.selectNodeContents(this)
+        window.getSelection().removeAllRanges()
+        window.getSelection().addRange(range)
     })
     div.addEventListener("blur", function () {
         this.removeAttribute("contenteditable")
     })
 })
-function makeEditable(element) {
-    element.setAttribute("contenteditable", "true")
-    element.focus()
-    const range = document.createRange()
-    range.selectNodeContents(element)
-    const selection = window.getSelection()
-    selection.removeAllRanges()
-    selection.addRange(range)
-}
+
 let selectedIdeology = 0
 let selectedSubideology = -1
 let ideologyButtons = []
@@ -83,6 +84,7 @@ for (let i = 0; i < ideologies.length; i++) {
     document.getElementById("ideologyPicker").appendChild(ideologyElement)
     ideologyButtons.push(ideologyElement)
 }
+
 function toggleIdeology(ideologyButton) {
     selectedIdeology = parseInt(ideologyButton.dataset.index)
     selectedSubideology = -1
@@ -91,7 +93,8 @@ function toggleIdeology(ideologyButton) {
         if (i === selectedIdeology) {
             button.style.border = "3px solid #505050"
             button.style.outline = `3px solid ${colors[i]}`
-        } else {
+        }
+        else {
             button.style.border = "3px solid #303030"
             button.style.outline = "3px solid #404040"
         }
@@ -102,6 +105,7 @@ function toggleIdeology(ideologyButton) {
     document.getElementById("subideology").innerText = ideologies[selectedIdeology]
     updateSubideologies()
 }
+
 function updateSubideologies() {
     const container = document.getElementById("subideologyPicker")
     const title = container.querySelector(".title")
@@ -117,6 +121,7 @@ function updateSubideologies() {
         subideologyButtons.push(subideologyElement)
     }
 }
+
 function toggleSubideology(subideologyButton) {
     selectedSubideology = parseInt(subideologyButton.dataset.index)
     for (let i = 0; i < subideologyButtons.length; i++) {
@@ -124,7 +129,8 @@ function toggleSubideology(subideologyButton) {
         if (i === selectedSubideology) {
             button.style.border = "3px solid #505050"
             button.style.outline = `3px solid ${colors[selectedIdeology]}`
-        } else {
+        }
+        else {
             button.style.border = "3px solid #303030"
             button.style.outline = "3px solid #404040"
         }
@@ -132,6 +138,7 @@ function toggleSubideology(subideologyButton) {
     document.getElementById("icon").style.backgroundImage = `url("./icon/${ideologies[selectedIdeology]}/${subideologyGroups[selectedIdeology][selectedSubideology]}.png")`
     document.getElementById("subideology").innerText = subideologyGroups[selectedIdeology][selectedSubideology]
 }
+
 let percentages = [5, 5, 0, 0, 0, 0, 10, 10, 15, 40, 15]
 let compensate = true
 function createInputs() {
@@ -149,7 +156,7 @@ function createInputs() {
         this.textContent = compensate ? "Disable Compensation" : "Enable Compensation"
     })
     const randomBtn = document.createElement("button")
-    randomBtn.id = "compensationButton"
+    randomBtn.id = "randomizationButton"
     randomBtn.textContent = "Randomize"
     randomBtn.addEventListener("click", randomizePercentages)
     btnContainer.appendChild(toggleBtn)
@@ -165,12 +172,12 @@ function createInputs() {
         input.value = percentages[i]
         input.dataset.index = i
         input.style.outline = `3px solid ${colors[i]}`
-        input.style.outlineOffset = "2px"
         input.addEventListener("input", function () { handlePercentageChange(this) })
         wrapper.appendChild(input)
         container.appendChild(wrapper)
     }
 }
+
 function randomizePercentages() {
     let nums = []
     let total = 0
@@ -187,6 +194,7 @@ function randomizePercentages() {
     updateInputs()
     updateChart()
 }
+
 function handlePercentageChange(input) {
     const index = parseInt(input.dataset.index)
     let newValue = parseInt(input.value) || 0
@@ -204,7 +212,8 @@ function handlePercentageChange(input) {
                 const adjustment = Math.min(available, remainingDifference)
                 percentages[currentIndex] -= adjustment
                 remainingDifference -= adjustment
-            } else {
+            }
+            else {
                 const available = 100 - percentages.reduce((a, b) => a + b, 0)
                 const adjustment = Math.min(available, -remainingDifference)
                 percentages[currentIndex] += adjustment
@@ -216,6 +225,7 @@ function handlePercentageChange(input) {
     updateInputs()
     updateChart()
 }
+
 function updateInputs() {
     const inputs = document.querySelectorAll("#popularityAdjuster input")
     inputs.forEach((input, i) => {
@@ -224,6 +234,7 @@ function updateInputs() {
         }
     })
 }
+
 function updateChart() {
     let cumulative = 0
     let gradientStops = []
@@ -238,5 +249,6 @@ function updateChart() {
     document.getElementById("pieChart").style.background = `conic-gradient(${gradientStops.join(", ")})`
     setTimeout(updateInputs, 0)
 }
+
 createInputs()
 updateChart()

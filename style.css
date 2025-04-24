@@ -282,7 +282,7 @@ ideology div {
 #popularityAdjuster {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 24px;
+    gap: 16px 24px;
 }
 
 #compensationButton,
