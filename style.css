@@ -1,0 +1,313 @@
+@font-face {
+    font-family: futura;
+    src: url(./futura.ttf);
+}
+
+body {
+    background-color: #202020;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 32px;
+}
+
+left {
+    display: flex;
+    flex-direction: column;
+    min-width: 532px;
+    gap: 16px;
+}
+
+screenshot {
+    display: block;
+    min-width: 532px;
+    min-height: 362px;
+    flex-grow: 1;
+}
+
+#overlay {
+    display: block;
+    position: absolute;
+    width: 532px;
+    height: 362px;
+    background-image: url(./Overlay.png);
+}
+
+#flag {
+    display: block;
+    position: absolute;
+    width: 82px;
+    height: 52px;
+    left: 34px;
+    top: 49px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(./Flag.png);
+    background-color: #000;
+}
+
+#icon {
+    display: block;
+    position: absolute;
+    width: 66px;
+    height: 66px;
+    left: 146px;
+    top: 42px;
+    background-image: url(./icon/Despotism/Absolute\ Monarchy.png);
+}
+
+#topNames {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 192px;
+    left: 220px;
+    top: 42px;
+    color: #f0f0f0;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -1px;
+}
+
+#country {
+    height: 30px;
+}
+
+#stability {
+    top: 61px;
+}
+
+#warSupport {
+    top: 93px;
+}
+
+.unity {
+    position: absolute;
+    width: 34px;
+    left: 495px;
+    color: #f0f0f0;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -1px;
+    text-align: center;
+}
+
+#bottomNames {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 236px;
+    left: 262px;
+    top: 168px;
+    color: #f0f0f0;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -1px;
+}
+
+#portraitBackground {
+    display: block;
+    position: absolute;
+    width: 115px;
+    height: 155px;
+    left: 16px;
+    top: 161px;
+    background-image: url(./Default.png);
+}
+
+#portrait {
+    display: block;
+    width: 115px;
+    height: 155px;
+    background-size: contain;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-image: url(./Schleicher.png);
+}
+
+#pieChart {
+    display: block;
+    position: absolute;
+    width: 62px;
+    height: 62px;
+    left: 155px;
+    top: 169px;
+    border-radius: 100%;
+    transform: scaleX(-1) rotate(-90deg);
+    transform-origin: center;
+}
+
+#focusIcon {
+    display: block;
+    position: absolute;
+    width: 88px;
+    height: 88px;
+    left: 147px;
+    top: 236px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(./Focus.png);
+}
+
+#focus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 215px;
+    height: 48px;
+    left: 244px;
+    top: 244px;
+    color: #f0f0f0;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -1px;
+    text-align: center;
+    padding: 12px 24px;
+}
+
+info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+info div {
+    color: #f0f0f0;
+    text-align: center;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: .5px;
+}
+
+buttons {
+    display: flex;
+    gap: 8px;
+}
+
+buttons button {
+    border: none;
+    border-radius: 4px;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: .5px;
+    color: #f0f0f0;
+    background-color: #404040;
+    cursor: pointer;
+    padding: 12px;
+}
+
+tools {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+}
+
+.picker {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+ideology {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #404040;
+    padding: 8px;
+    border-radius: 8px;
+    color: #f0f0f0;
+    text-align: center;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 12px;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    letter-spacing: .5px;
+    border: 3px solid #303030;
+    outline-offset: -6px;
+}
+
+ideology:hover,
+buttons button:hover,
+#compensationButton:hover,
+#randomizationButton:hover {
+    filter: brightness(1.1);
+}
+
+ideology img {
+    width: 66px;
+    height: 66px;
+}
+
+ideology div {
+    display: flex;
+    align-items: center;
+    height: 32px;
+}
+
+ideology div {
+    display: flex;
+    align-items: center;
+    height: 100px;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    margin: 3px;
+    cursor: auto;
+}
+
+#popularityAdjuster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+}
+
+#compensationButton,
+#randomizationButton {
+    border: none;
+    border-radius: 4px;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: .5px;
+    color: #f0f0f0;
+    background-color: #404040;
+    cursor: pointer;
+    padding: 12px;
+}
+
+.percentage-control {
+    display: flex;
+    align-items: center;
+}
+
+.percentage-control input {
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    width: 64px;
+    border: solid 2px #202020;
+}
