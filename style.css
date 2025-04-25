@@ -1,10 +1,17 @@
+:root {
+    --background: #202020;
+    --white: #f0f0f0;
+    --button: #404040;
+    --border: #303030;
+}
+
 @font-face {
     font-family: futura;
     src: url(./futura.ttf);
 }
 
 body {
-    background-color: #202020;
+    background-color: var(--background);
     margin: 0;
     padding: 0;
 }
@@ -67,7 +74,7 @@ screenshot {
     width: 192px;
     left: 220px;
     top: 42px;
-    color: #f0f0f0;
+    color: var(--white);
     font-family: futura;
     font-weight: 600;
     font-size: 14px;
@@ -90,7 +97,7 @@ screenshot {
     position: absolute;
     width: 34px;
     left: 495px;
-    color: #f0f0f0;
+    color: var(--white);
     font-family: futura;
     font-weight: 600;
     font-size: 14px;
@@ -105,7 +112,7 @@ screenshot {
     width: 236px;
     left: 262px;
     top: 168px;
-    color: #f0f0f0;
+    color: var(--white);
     font-family: futura;
     font-weight: 600;
     font-size: 14px;
@@ -166,7 +173,7 @@ screenshot {
     height: 48px;
     left: 244px;
     top: 244px;
-    color: #f0f0f0;
+    color: var(--white);
     font-family: futura;
     font-weight: 600;
     font-size: 16px;
@@ -183,7 +190,7 @@ info {
 }
 
 info div {
-    color: #f0f0f0;
+    color: var(--white);
     text-align: center;
     font-family: futura;
     font-weight: 600;
@@ -203,8 +210,8 @@ buttons button {
     font-weight: 600;
     font-size: 16px;
     letter-spacing: .5px;
-    color: #f0f0f0;
-    background-color: #404040;
+    color: var(--white);
+    background-color: var(--button);
     cursor: pointer;
     padding: 12px;
 }
@@ -227,10 +234,10 @@ ideology {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    background-color: #404040;
+    background-color: var(--button);
     padding: 8px;
     border-radius: 8px;
-    color: #f0f0f0;
+    color: var(--white);
     text-align: center;
     font-family: futura;
     font-weight: 600;
@@ -239,7 +246,7 @@ ideology {
     height: 100px;
     cursor: pointer;
     letter-spacing: .5px;
-    border: 3px solid #303030;
+    border: 3px solid var(--border);
     outline-offset: -6px;
 }
 
@@ -292,8 +299,8 @@ ideology div {
     font-weight: 600;
     font-size: 16px;
     letter-spacing: .5px;
-    color: #f0f0f0;
-    background-color: #404040;
+    color: var(--white);
+    background-color: var(--button);
     cursor: pointer;
     padding: 12px;
 }
@@ -307,8 +314,9 @@ ideology div {
     padding: 8px;
     border: none;
     border-radius: 8px;
-    width: 56px;
-    border: solid 2px #202020;
+    width: 52px;
+    border: solid 2px var(--background);
+    background-color: var(--white);
 }
 
 #smallText {
@@ -327,5 +335,5 @@ ideology div {
 }
 
 input:disabled {
-    background-color: #404040;
+    background-color: var(--button);
 }

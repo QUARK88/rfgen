@@ -161,12 +161,12 @@ function createInputs() {
         const lockBox = document.createElement("div")
         lockBox.className = "lock-box"
         lockBox.style.border = `3px solid ${colors[i]}`
-        lockBox.style.backgroundColor = lockedPercentages[i] ? "#000" : "#fff"
+        lockBox.style.backgroundColor = lockedPercentages[i] ? "#404040" : "#f0f0f0"
         lockBox.dataset.index = i
         lockBox.addEventListener("click", function () {
             const idx = parseInt(this.dataset.index)
             lockedPercentages[idx] = !lockedPercentages[idx]
-            this.style.backgroundColor = lockedPercentages[idx] ? "#000" : "#fff"
+            this.style.backgroundColor = lockedPercentages[idx] ? "#404040" : "#f0f0f0"
             const input = document.querySelector(`#popularityAdjuster input[data-index="${idx}"]`)
             input.disabled = lockedPercentages[idx]
         })
