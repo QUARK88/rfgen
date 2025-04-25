@@ -97,6 +97,11 @@ function toggleIdeology(ideologyButton) {
     document.getElementById("portraitBackground").style.backgroundImage = `url("./portraitBackground/${ideologies[selectedIdeology]}.png")`
     document.getElementById("ideology").innerText = ideologies[selectedIdeology]
     document.getElementById("subideology").innerText = ideologies[selectedIdeology]
+    const portrait = document.getElementById("portrait")
+    const currentPortrait = getComputedStyle(portrait).backgroundImage
+    if (currentPortrait.includes("Polzl.png")) {
+        portrait.style.backgroundImage = "url(./Schleicher.png)"
+    }
     updateSubideologies()
 }
 function updateSubideologies() {
