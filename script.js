@@ -44,11 +44,7 @@ function setupImageEdit(buttonId, targetId) {
 setupImageEdit("flagEdit", "flag")
 setupImageEdit("portraitEdit", "portrait")
 setupImageEdit("focusEdit", "focusIcon")
-function setupImageReset(buttonId, targetId) {
-    document.getElementById(buttonId).addEventListener("click", () => {
-        document.getElementById(targetId).style.backgroundImage = "none"
-    })
-}
+function setupImageReset(buttonId, targetId) { document.getElementById(buttonId).addEventListener("click", () => { document.getElementById(targetId).style.backgroundImage = "none" }) }
 setupImageReset("flagReset", "flag")
 setupImageReset("portraitReset", "portrait")
 setupImageReset("focusReset", "focusIcon")
@@ -63,9 +59,7 @@ editableDivs.forEach(divId => {
         window.getSelection().removeAllRanges()
         window.getSelection().addRange(range)
     })
-    div.addEventListener("blur", function () {
-        this.removeAttribute("contenteditable")
-    })
+    div.addEventListener("blur", function () { this.removeAttribute("contenteditable") })
 })
 let selectedIdeology = 0
 let selectedSubideology = -1
@@ -99,9 +93,7 @@ function toggleIdeology(ideologyButton) {
     document.getElementById("subideology").innerText = ideologies[selectedIdeology]
     const portrait = document.getElementById("portrait")
     const currentPortrait = getComputedStyle(portrait).backgroundImage
-    if (currentPortrait.includes("Polzl.png")) {
-        portrait.style.backgroundImage = "url(./Schleicher.png)"
-    }
+    if (currentPortrait.includes("Polzl.png")) { portrait.style.backgroundImage = "url(./Schleicher.png)" }
     updateSubideologies()
 }
 function updateSubideologies() {
@@ -138,34 +130,20 @@ function toggleSubideology(subideologyButton) {
     const currentPortrait = getComputedStyle(portrait).backgroundImage
     const currentSubideology = subideologyGroups[selectedIdeology][selectedSubideology]
     const isSpecialSubideology = currentSubideology === "Spartakism" || currentSubideology === "Leninism"
-    if (currentPortrait.includes("Schleicher.png") && isSpecialSubideology) {
-        portrait.style.backgroundImage = "url(./Polzl.png)"
-    }
-    else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) {
-        portrait.style.backgroundImage = "url(./Schleicher.png)"
-    }
+    if (currentPortrait.includes("Schleicher.png") && isSpecialSubideology) { portrait.style.backgroundImage = "url(./Polzl.png)" }
+    else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) { portrait.style.backgroundImage = "url(./Schleicher.png)" }
 }
 let percentages = [5, 5, 0, 0, 0, 0, 10, 10, 15, 40, 15]
-let compensate = true
+let lockedPercentages = new Array(colors.length).fill(false)
 function createInputs() {
     const container = document.getElementById("popularityAdjuster")
     container.innerHTML = ""
     const btnContainer = document.createElement("div")
     btnContainer.style.display = "flex"
-    btnContainer.style.gap = "10px"
-    btnContainer.style.marginBottom = "10px"
-    const toggleBtn = document.createElement("button")
-    toggleBtn.id = "compensationButton"
-    toggleBtn.textContent = compensate ? "Disable Compensation" : "Enable Compensation"
-    toggleBtn.addEventListener("click", function () {
-        compensate = !compensate
-        this.textContent = compensate ? "Disable Compensation" : "Enable Compensation"
-    })
     const randomBtn = document.createElement("button")
     randomBtn.id = "randomizationButton"
     randomBtn.textContent = "Randomize"
     randomBtn.addEventListener("click", randomizePercentages)
-    btnContainer.appendChild(toggleBtn)
     btnContainer.appendChild(randomBtn)
     container.appendChild(btnContainer)
     for (let i = 0; i < colors.length; i++) {
@@ -179,63 +157,91 @@ function createInputs() {
         input.dataset.index = i
         input.style.outline = `3px solid ${colors[i]}`
         input.addEventListener("input", function () { handlePercentageChange(this) })
+        if (lockedPercentages[i]) input.disabled = true
+        const lockBox = document.createElement("div")
+        lockBox.className = "lock-box"
+        lockBox.style.border = `3px solid ${colors[i]}`
+        lockBox.style.backgroundColor = lockedPercentages[i] ? "#000" : "#fff"
+        lockBox.dataset.index = i
+        lockBox.addEventListener("click", function () {
+            const idx = parseInt(this.dataset.index)
+            lockedPercentages[idx] = !lockedPercentages[idx]
+            this.style.backgroundColor = lockedPercentages[idx] ? "#000" : "#fff"
+            const input = document.querySelector(`#popularityAdjuster input[data-index="${idx}"]`)
+            input.disabled = lockedPercentages[idx]
+        })
         wrapper.appendChild(input)
+        wrapper.appendChild(lockBox)
         container.appendChild(wrapper)
     }
 }
-function randomizePercentages() {
-    let nums = []
-    let total = 0
-    for (let i = 0; i < colors.length; i++) {
-        const num = Math.floor(Math.random() * 100)
-        nums.push(num)
-        total += num
+function handlePercentageChange(input) {
+    const index = parseInt(input.dataset.index)
+    if (lockedPercentages[index]) return
+    const oldValue = percentages[index]
+    let newValue = parseInt(input.value) || 0
+    newValue = Math.max(0, Math.min(100, newValue))
+    const lockedTotal = percentages.reduce((sum, val, i) => sum + (lockedPercentages[i] ? val : 0), 0)
+    const maxAllowed = 100 - lockedTotal
+    if (newValue > maxAllowed) newValue = maxAllowed
+    percentages[index] = newValue
+    const difference = newValue - oldValue
+    if (difference !== 0) {
+        let unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i] && i !== index).sort((a, b) => percentages[a] - percentages[b])
+        if (difference > 0) {
+            let remaining = difference
+            unlockedIndices.reverse().forEach(idx => {
+                if (remaining <= 0) return
+                const deduction = Math.min(percentages[idx], remaining)
+                percentages[idx] = Math.max(0, percentages[idx] - deduction)
+                remaining -= deduction
+            })
+            if (remaining > 0) percentages[index] = Math.max(0, newValue - remaining)
+        } else {
+            let remaining = -difference
+            unlockedIndices.forEach(idx => {
+                if (remaining <= 0) return
+                const addition = Math.min(100 - percentages[idx], remaining)
+                percentages[idx] += addition
+                remaining -= addition
+            })
+        }
     }
-    for (let i = 0; i < nums.length; i++) {
-        percentages[i] = Math.round((nums[i] / total) * 100)
+    const currentTotal = percentages.reduce((a, b) => a + b, 0)
+    if (currentTotal !== 100) {
+        const adjustment = 100 - currentTotal
+        const targetIdx = percentages.findIndex((val, i) => !lockedPercentages[i] && i !== index)
+        if (targetIdx !== -1) percentages[targetIdx] += adjustment
     }
-    const sum = percentages.reduce((a, b) => a + b, 0)
-    if (sum !== 100) { percentages[0] += 100 - sum }
     updateInputs()
     updateChart()
 }
-function handlePercentageChange(input) {
-    const index = parseInt(input.dataset.index)
-    let newValue = parseInt(input.value) || 0
-    newValue = Math.max(0, Math.min(100, newValue))
-    const difference = newValue - percentages[index]
-    if (difference === 0) return
-    percentages[index] = newValue
-    if (compensate) {
-        let remainingDifference = difference
-        let currentIndex = difference > 0 ? (index + 1) % colors.length : (index - 1 + colors.length) % colors.length
-        while (remainingDifference !== 0) {
-            if (currentIndex === index) break
-            if (difference > 0) {
-                const available = percentages[currentIndex]
-                const adjustment = Math.min(available, remainingDifference)
-                percentages[currentIndex] -= adjustment
-                remainingDifference -= adjustment
-            }
-            else {
-                const available = 100 - percentages.reduce((a, b) => a + b, 0)
-                const adjustment = Math.min(available, -remainingDifference)
-                percentages[currentIndex] += adjustment
-                remainingDifference += adjustment
-            }
-            currentIndex = difference > 0 ? (currentIndex + 1) % colors.length : (currentIndex - 1 + colors.length) % colors.length
-        }
+function randomizePercentages() {
+    const lockedTotal = percentages.reduce((sum, val, idx) => sum + (lockedPercentages[idx] ? val : 0), 0)
+    const availableTotal = 100 - lockedTotal
+    const unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i])
+    if (unlockedIndices.length === 0) return
+    const weights = unlockedIndices.map(() => Math.random() + 0.1)
+    const totalWeight = weights.reduce((a, b) => a + b, 0)
+    let remaining = availableTotal
+    unlockedIndices.forEach((idx, i) => {
+        const basePct = Math.floor((weights[i] / totalWeight) * availableTotal)
+        percentages[idx] = Math.max(1, basePct)
+        remaining -= percentages[idx]
+    })
+    while (remaining > 0) {
+        unlockedIndices.forEach(idx => {
+            if (remaining <= 0) return
+            percentages[idx]++
+            remaining--
+        })
     }
     updateInputs()
     updateChart()
 }
 function updateInputs() {
     const inputs = document.querySelectorAll("#popularityAdjuster input")
-    inputs.forEach((input, i) => {
-        if (input !== document.activeElement) {
-            input.value = percentages[i]
-        }
-    })
+    inputs.forEach((input, i) => { if (input !== document.activeElement) { input.value = percentages[i] } })
 }
 function updateChart() {
     let cumulative = 0

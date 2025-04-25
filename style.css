@@ -307,10 +307,25 @@ ideology div {
     padding: 8px;
     border: none;
     border-radius: 8px;
-    width: 64px;
+    width: 56px;
     border: solid 2px #202020;
 }
 
 #smallText {
     font-size: 20px;
+}
+
+.lock-box {
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+}
+
+.percentage-control {
+    display: flex;
+    align-items: center;
+}
+
+input:disabled {
+    background-color: #404040;
 }
