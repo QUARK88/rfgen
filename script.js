@@ -12,7 +12,6 @@ const despotism = ["Absolute Monarchy", "Constitutional Dictatorship", "Constitu
 const reactionaryism = ["Aristocratic Reaction", "Esoteric Reactionism", "Reactionary Populism", "Religious Fundamentalism"]
 const subideologyGroups = [accelerationism, anarchism, vanguardSocialism, popularSocialism, revisionistSocialism, progressivism, liberalism, conservatism, polyarchy, despotism, reactionaryism]
 const colors = ["#f8f8f8", "#a4946e", "#c3350a", "#ec494c", "#ffae43", "#f87f9d", "#f6e86f", "#7197ff", "#6e6e6e", "#292929", "#8046a4"]
-
 function setupImageUpload(buttonId, targetId) {
     document.getElementById(buttonId).addEventListener("click", () => {
         const input = document.createElement("input")
@@ -36,7 +35,6 @@ function setupImageUpload(buttonId, targetId) {
 setupImageUpload("flagUpload", "flag")
 setupImageUpload("portraitUpload", "portrait")
 setupImageUpload("focusUpload", "focusIcon")
-
 function setupImageEdit(buttonId, targetId) {
     document.getElementById(buttonId).addEventListener("click", () => {
         const target = document.getElementById(targetId)
@@ -46,7 +44,6 @@ function setupImageEdit(buttonId, targetId) {
 setupImageEdit("flagEdit", "flag")
 setupImageEdit("portraitEdit", "portrait")
 setupImageEdit("focusEdit", "focusIcon")
-
 function setupImageReset(buttonId, targetId) {
     document.getElementById(buttonId).addEventListener("click", () => {
         document.getElementById(targetId).style.backgroundImage = "none"
@@ -55,7 +52,6 @@ function setupImageReset(buttonId, targetId) {
 setupImageReset("flagReset", "flag")
 setupImageReset("portraitReset", "portrait")
 setupImageReset("focusReset", "focusIcon")
-
 const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus"]
 editableDivs.forEach(divId => {
     const div = document.getElementById(divId)
@@ -71,7 +67,6 @@ editableDivs.forEach(divId => {
         this.removeAttribute("contenteditable")
     })
 })
-
 let selectedIdeology = 0
 let selectedSubideology = -1
 let ideologyButtons = []
@@ -84,7 +79,6 @@ for (let i = 0; i < ideologies.length; i++) {
     document.getElementById("ideologyPicker").appendChild(ideologyElement)
     ideologyButtons.push(ideologyElement)
 }
-
 function toggleIdeology(ideologyButton) {
     selectedIdeology = parseInt(ideologyButton.dataset.index)
     selectedSubideology = -1
@@ -105,7 +99,6 @@ function toggleIdeology(ideologyButton) {
     document.getElementById("subideology").innerText = ideologies[selectedIdeology]
     updateSubideologies()
 }
-
 function updateSubideologies() {
     const container = document.getElementById("subideologyPicker")
     const title = container.querySelector(".title")
@@ -121,7 +114,6 @@ function updateSubideologies() {
         subideologyButtons.push(subideologyElement)
     }
 }
-
 function toggleSubideology(subideologyButton) {
     selectedSubideology = parseInt(subideologyButton.dataset.index)
     for (let i = 0; i < subideologyButtons.length; i++) {
@@ -137,8 +129,17 @@ function toggleSubideology(subideologyButton) {
     }
     document.getElementById("icon").style.backgroundImage = `url("./icon/${ideologies[selectedIdeology]}/${subideologyGroups[selectedIdeology][selectedSubideology]}.png")`
     document.getElementById("subideology").innerText = subideologyGroups[selectedIdeology][selectedSubideology]
+    const portrait = document.getElementById("portrait")
+    const currentPortrait = getComputedStyle(portrait).backgroundImage
+    const currentSubideology = subideologyGroups[selectedIdeology][selectedSubideology]
+    const isSpecialSubideology = currentSubideology === "Spartakism" || currentSubideology === "Leninism"
+    if (currentPortrait.includes("Schleicher.png") && isSpecialSubideology) {
+        portrait.style.backgroundImage = "url(./Polzl.png)"
+    }
+    else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) {
+        portrait.style.backgroundImage = "url(./Schleicher.png)"
+    }
 }
-
 let percentages = [5, 5, 0, 0, 0, 0, 10, 10, 15, 40, 15]
 let compensate = true
 function createInputs() {
@@ -177,7 +178,6 @@ function createInputs() {
         container.appendChild(wrapper)
     }
 }
-
 function randomizePercentages() {
     let nums = []
     let total = 0
@@ -194,7 +194,6 @@ function randomizePercentages() {
     updateInputs()
     updateChart()
 }
-
 function handlePercentageChange(input) {
     const index = parseInt(input.dataset.index)
     let newValue = parseInt(input.value) || 0
@@ -225,7 +224,6 @@ function handlePercentageChange(input) {
     updateInputs()
     updateChart()
 }
-
 function updateInputs() {
     const inputs = document.querySelectorAll("#popularityAdjuster input")
     inputs.forEach((input, i) => {
@@ -234,7 +232,6 @@ function updateInputs() {
         }
     })
 }
-
 function updateChart() {
     let cumulative = 0
     let gradientStops = []
@@ -249,6 +246,5 @@ function updateChart() {
     document.getElementById("pieChart").style.background = `conic-gradient(${gradientStops.join(", ")})`
     setTimeout(updateInputs, 0)
 }
-
 createInputs()
 updateChart()

@@ -12,7 +12,7 @@ body {
 body {
     display: flex;
     gap: 16px;
-    padding-bottom: 32px;
+    padding-bottom: 16px;
 }
 
 left {
@@ -26,7 +26,6 @@ screenshot {
     display: block;
     min-width: 532px;
     min-height: 362px;
-    flex-grow: 1;
 }
 
 #overlay {
@@ -310,4 +309,8 @@ ideology div {
     border-radius: 8px;
     width: 64px;
     border: solid 2px #202020;
+}
+
+#smallText {
+    font-size: 20px;
 }
