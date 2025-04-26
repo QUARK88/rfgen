@@ -179,13 +179,12 @@ function createInputs() {
 function equalizePercentages() {
     const lockedTotal = percentages.reduce((sum, val, idx) => sum + (lockedPercentages[idx] ? val : 0), 0)
     const availableTotal = 100 - lockedTotal
-    const unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i]).reverse()
+    const unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i])
     if (unlockedIndices.length === 0) return
-    const equalShare = Math.floor(availableTotal / unlockedIndices.length)
-    let remaining = availableTotal
+    const baseShare = Math.floor(availableTotal / unlockedIndices.length)
+    const remainder = availableTotal % unlockedIndices.length
     unlockedIndices.forEach((idx, i) => {
-        percentages[idx] = (i < unlockedIndices.length - 1) ? equalShare : remaining
-        remaining -= equalShare
+        percentages[idx] = baseShare + (i < remainder ? 1 : 0)
     })
     updateInputs()
     updateChart()
