@@ -14,9 +14,6 @@ body {
     background-color: var(--background);
     margin: 0;
     padding: 0;
-}
-
-body {
     display: flex;
     gap: 16px;
     padding-bottom: 16px;
@@ -41,6 +38,134 @@ screenshot {
     width: 532px;
     height: 362px;
     background-image: url(./Overlay.png);
+}
+
+#flagOverlay {
+    display: block;
+    position: absolute;
+    width: 82px;
+    height: 52px;
+    left: 34px;
+    top: 49px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation: flagFrames 4.7s steps(27) infinite;
+    background-image: url("./flagAnimation/1.png");
+}
+
+@keyframes flagFrames {
+    0% {
+        background-image: url("./flagAnimation/1.png");
+    }
+
+    3.7% {
+        background-image: url("./flagAnimation/2.png");
+    }
+
+    7.4% {
+        background-image: url("./flagAnimation/3.png");
+    }
+
+    11.1% {
+        background-image: url("./flagAnimation/4.png");
+    }
+
+    14.8% {
+        background-image: url("./flagAnimation/5.png");
+    }
+
+    18.5% {
+        background-image: url("./flagAnimation/6.png");
+    }
+
+    22.2% {
+        background-image: url("./flagAnimation/7.png");
+    }
+
+    25.9% {
+        background-image: url("./flagAnimation/8.png");
+    }
+
+    29.6% {
+        background-image: url("./flagAnimation/9.png");
+    }
+
+    33.3% {
+        background-image: url("./flagAnimation/10.png");
+    }
+
+    37% {
+        background-image: url("./flagAnimation/11.png");
+    }
+
+    40.7% {
+        background-image: url("./flagAnimation/12.png");
+    }
+
+    44.4% {
+        background-image: url("./flagAnimation/13.png");
+    }
+
+    48.1% {
+        background-image: url("./flagAnimation/14.png");
+    }
+
+    51.8% {
+        background-image: url("./flagAnimation/15.png");
+    }
+
+    55.5% {
+        background-image: url("./flagAnimation/16.png");
+    }
+
+    59.2% {
+        background-image: url("./flagAnimation/17.png");
+    }
+
+    62.9% {
+        background-image: url("./flagAnimation/18.png");
+    }
+
+    66.6% {
+        background-image: url("./flagAnimation/19.png");
+    }
+
+    70.3% {
+        background-image: url("./flagAnimation/20.png");
+    }
+
+    74% {
+        background-image: url("./flagAnimation/21.png");
+    }
+
+    77.7% {
+        background-image: url("./flagAnimation/22.png");
+    }
+
+    81.4% {
+        background-image: url("./flagAnimation/23.png");
+    }
+
+    85.1% {
+        background-image: url("./flagAnimation/24.png");
+    }
+
+    88.8% {
+        background-image: url("./flagAnimation/25.png");
+    }
+
+    92.5% {
+        background-image: url("./flagAnimation/26.png");
+    }
+
+    96.2% {
+        background-image: url("./flagAnimation/27.png");
+    }
+
+    100% {
+        background-image: url("./flagAnimation/1.png");
+    }
 }
 
 #flag {
@@ -252,7 +377,7 @@ ideology {
 
 ideology:hover,
 buttons button:hover,
-#compensationButton:hover,
+#equalizationButton:hover,
 #randomizationButton:hover {
     filter: brightness(1.1);
 }
@@ -288,11 +413,10 @@ ideology div {
 #popularityAdjuster {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px 24px;
+    gap: 16px;
 }
 
-#compensationButton,
-#randomizationButton {
+#popularityAdjuster button {
     border: none;
     border-radius: 4px;
     font-family: futura;
@@ -303,37 +427,39 @@ ideology div {
     background-color: var(--button);
     cursor: pointer;
     padding: 12px;
+    width: 128px;
 }
 
-.percentage-control {
+.percentageControl {
     display: flex;
     align-items: center;
 }
 
-.percentage-control input {
+.percentageControl input {
     padding: 8px;
     border: none;
     border-radius: 8px;
-    width: 52px;
+    width: 44px;
     border: solid 2px var(--background);
     background-color: var(--white);
+}
+
+.percentageControl div {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
 }
 
 #smallText {
     font-size: 20px;
 }
 
-.lock-box {
-    width: 26px;
-    height: 26px;
-    cursor: pointer;
-}
-
-.percentage-control {
-    display: flex;
-    align-items: center;
-}
-
 input:disabled {
     background-color: var(--button);
+}
+
+@media screen and (max-width: 1200px) {
+    body {
+        flex-direction: column;
+    }
 }

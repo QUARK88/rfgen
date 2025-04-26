@@ -138,17 +138,19 @@ let lockedPercentages = new Array(colors.length).fill(false)
 function createInputs() {
     const container = document.getElementById("popularityAdjuster")
     container.innerHTML = ""
-    const btnContainer = document.createElement("div")
-    btnContainer.style.display = "flex"
+    const equalizeBtn = document.createElement("button")
+    equalizeBtn.id = "equalizationButton"
+    equalizeBtn.textContent = "Equalize"
+    equalizeBtn.addEventListener("click", equalizePercentages)
+    container.appendChild(equalizeBtn)
     const randomBtn = document.createElement("button")
     randomBtn.id = "randomizationButton"
     randomBtn.textContent = "Randomize"
     randomBtn.addEventListener("click", randomizePercentages)
-    btnContainer.appendChild(randomBtn)
-    container.appendChild(btnContainer)
+    container.appendChild(randomBtn)
     for (let i = 0; i < colors.length; i++) {
         const wrapper = document.createElement("div")
-        wrapper.className = "percentage-control"
+        wrapper.className = "percentageControl"
         const input = document.createElement("input")
         input.type = "number"
         input.min = "0"
@@ -159,7 +161,6 @@ function createInputs() {
         input.addEventListener("input", function () { handlePercentageChange(this) })
         if (lockedPercentages[i]) input.disabled = true
         const lockBox = document.createElement("div")
-        lockBox.className = "lock-box"
         lockBox.style.border = `3px solid ${colors[i]}`
         lockBox.style.backgroundColor = lockedPercentages[i] ? "#404040" : "#f0f0f0"
         lockBox.dataset.index = i
@@ -174,6 +175,20 @@ function createInputs() {
         wrapper.appendChild(lockBox)
         container.appendChild(wrapper)
     }
+}
+function equalizePercentages() {
+    const lockedTotal = percentages.reduce((sum, val, idx) => sum + (lockedPercentages[idx] ? val : 0), 0)
+    const availableTotal = 100 - lockedTotal
+    const unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i]).reverse()
+    if (unlockedIndices.length === 0) return
+    const equalShare = Math.floor(availableTotal / unlockedIndices.length)
+    let remaining = availableTotal
+    unlockedIndices.forEach((idx, i) => {
+        percentages[idx] = (i < unlockedIndices.length - 1) ? equalShare : remaining
+        remaining -= equalShare
+    })
+    updateInputs()
+    updateChart()
 }
 function handlePercentageChange(input) {
     const index = parseInt(input.dataset.index)
