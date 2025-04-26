@@ -24,7 +24,6 @@ function setupImageUpload(buttonId, targetId) {
                     const target = document.getElementById(targetId)
                     target.style.backgroundImage = `url(${event.target.result})`
                     target.style.backgroundSize = "cover"
-                    target.style.backgroundPosition = "center"
                 }
                 reader.readAsDataURL(e.target.files[0])
             }
