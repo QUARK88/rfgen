@@ -2,14 +2,14 @@ const ideologies = ["Accelerationism", "Anarchism", "Vanguard Socialism", "Popul
 const accelerationism = ["Fiumanism", "Futurism", "National Rejuvenatism", "Neo-Folkism", "Surrealism", "Technocracy", "Vperedism"]
 const anarchism = ["Individualist Anarchism", "Mystical Anarchism", "National Anarchism", "Naturist Anarchism", "Social Anarchism", "Statelessness", "Stratocratic Anarchism"]
 const vanguardSocialism = ["Leninism", "National Vanguardism", "Social Republicanism", "State Socialism", "Stratocratic Socialism"]
-const popularSocialism = ["Folk Socialism", "National Syndicalism", "Spartakism", "Syndicalism"]
+const popularSocialism = ["Folk Socialism", "National Syndicalism", "Spartakism", "Revolutionary Syndicalism"]
 const revisionistSocialism = ["Agrarian Socialism", "Democratic Socialism", "Esoteric Socialism", "Nationalist Socialism", "Religious Socialism", "Utopian Socialism"]
 const progressivism = ["Left Wing Populism", "Liberal Socialism", "Progressive Corporatism", "Progressive Democracy", "Social Nationalism"]
 const liberalism = ["Classical Liberalism", "Libertarian Capitalism", "National Liberalism", "Social Liberalism"]
 const conservatism = ["Liberal Conservatism", "National Conservatism", "Right Wing Populism", "Social Conservatism"]
 const polyarchy = ["Anocracy", "Colonial Government", "National Democracy", "Oligarchy", "Plutocracy", "Praetorian Oligarchy", "Provisional Government"]
 const despotism = ["Absolute Monarchy", "Constitutional Dictatorship", "Constitutional Monarchy", "Military Dictatorship", "Personalist Dictatorship", "Revolutionary Nationalism", "Theocracy"]
-const reactionism = ["Aristocratic Reaction", "Esoteric Reactionism", "Reactionary Populism", "Religious Fundamentalism"]
+const reactionism = ["Aristocratic Reaction", "Reactionary Esotericism", "Reactionary Populism", "Religious Fundamentalism"]
 const subideologyGroups = [accelerationism, anarchism, vanguardSocialism, popularSocialism, revisionistSocialism, progressivism, liberalism, conservatism, polyarchy, despotism, reactionism]
 const colors = ["#f8f8f8", "#a4946e", "#c3350a", "#ec494c", "#ffae43", "#f87f9d", "#f6e86f", "#7197ff", "#6e6e6e", "#292929", "#8046a4"]
 function setupImageUpload(buttonId, targetId) {
@@ -72,9 +72,11 @@ for (let i = 0; i < ideologies.length; i++) {
     document.getElementById("ideologyPicker").appendChild(ideologyElement)
     ideologyButtons.push(ideologyElement)
 }
+let descriptions = {}
 function toggleIdeology(ideologyButton) {
     selectedIdeology = parseInt(ideologyButton.dataset.index)
     selectedSubideology = -1
+    subideologyDescription.innerHTML = "Description of the selected subideology"
     for (let i = 0; i < ideologyButtons.length; i++) {
         const button = ideologyButtons[i]
         if (i === selectedIdeology) {
@@ -86,10 +88,12 @@ function toggleIdeology(ideologyButton) {
             button.style.outline = "3px solid #404040"
         }
     }
-    document.getElementById("icon").style.backgroundImage = `url("./icon/${ideologies[selectedIdeology]}.png")`
-    document.getElementById("portraitBackground").style.backgroundImage = `url("./portraitBackground/${ideologies[selectedIdeology]}.png")`
-    document.getElementById("ideology").innerText = ideologies[selectedIdeology]
-    document.getElementById("subideology").innerText = ideologies[selectedIdeology]
+    const ideologyName = ideologies[selectedIdeology]
+    document.getElementById("icon").style.backgroundImage = `url("./icon/${ideologyName}.png")`
+    document.getElementById("portraitBackground").style.backgroundImage = `url("./portraitBackground/${ideologyName}.png")`
+    document.getElementById("ideology").innerText = ideologyName
+    document.getElementById("subideology").innerText = ideologyName
+    document.getElementById("ideologyDescription").innerHTML = descriptions[ideologyName] || ""
     const portrait = document.getElementById("portrait")
     const currentPortrait = getComputedStyle(portrait).backgroundImage
     if (currentPortrait.includes("Polzl.png")) { portrait.style.backgroundImage = "url(./Schleicher.png)" }
@@ -123,15 +127,20 @@ function toggleSubideology(subideologyButton) {
             button.style.outline = "3px solid #404040"
         }
     }
-    document.getElementById("icon").style.backgroundImage = `url("./icon/${ideologies[selectedIdeology]}/${subideologyGroups[selectedIdeology][selectedSubideology]}.png")`
-    document.getElementById("subideology").innerText = subideologyGroups[selectedIdeology][selectedSubideology]
+    const subideologyName = subideologyGroups[selectedIdeology][selectedSubideology]
+    document.getElementById("icon").style.backgroundImage = `url("./icon/${ideologies[selectedIdeology]}/${subideologyName}.png")`
+    document.getElementById("subideology").innerText = subideologyName
+    document.getElementById("subideologyDescription").innerHTML = descriptions[subideologyName] || ""
     const portrait = document.getElementById("portrait")
     const currentPortrait = getComputedStyle(portrait).backgroundImage
-    const currentSubideology = subideologyGroups[selectedIdeology][selectedSubideology]
-    const isSpecialSubideology = currentSubideology === "Spartakism" || currentSubideology === "Leninism"
+    const isSpecialSubideology = subideologyName === "Spartakism" || subideologyName === "Leninism"
     if (currentPortrait.includes("Schleicher.png") && isSpecialSubideology) { portrait.style.backgroundImage = "url(./Polzl.png)" }
     else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) { portrait.style.backgroundImage = "url(./Schleicher.png)" }
 }
+fetch('./descriptions.json')
+    .then(response => response.json())
+    .then(data => descriptions = data)
+    .catch(err => console.error('Error loading descriptions:', err))
 let percentages = [5, 5, 0, 0, 0, 0, 10, 10, 15, 40, 15]
 let lockedPercentages = new Array(colors.length).fill(false)
 function createInputs() {
@@ -269,6 +278,30 @@ function updateChart() {
     }
     document.getElementById("pieChart").style.background = `conic-gradient(${gradientStops.join(", ")})`
     setTimeout(updateInputs, 0)
+}
+document.getElementById('randomizeIdeology').addEventListener('click', randomizeSubideology)
+document.getElementById('randomizeStability').addEventListener('click', () => {
+    document.getElementById('stability').innerText = `${Math.floor(Math.random() * 101)}%`
+})
+document.getElementById('randomizeWarSupport').addEventListener('click', () => {
+    document.getElementById('warSupport').innerText = `${Math.floor(Math.random() * 101)}%`
+})
+function randomizeSubideology() {
+    const allSubideologies = []
+    subideologyGroups.forEach((group, ideologyIndex) => {
+        group.forEach((subideology, subideologyIndex) => {
+            allSubideologies.push({ ideologyIndex, subideologyIndex })
+        })
+    })
+    if (allSubideologies.length > 0) {
+        const randomPick = allSubideologies[Math.floor(Math.random() * allSubideologies.length)]
+        const ideologyButton = ideologyButtons[randomPick.ideologyIndex]
+        toggleIdeology(ideologyButton)
+        setTimeout(() => {
+            const subideologyButton = document.querySelector(`#subideologyPicker ideology[data-index="${randomPick.subideologyIndex}"]`)
+            if (subideologyButton) toggleSubideology(subideologyButton)
+        }, 0)
+    }
 }
 createInputs()
 updateChart()

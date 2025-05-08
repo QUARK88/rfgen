@@ -10,8 +10,7 @@
     <meta property="og:site_name" content="quark88.github.io/rfgen">
     <meta property="og:title" content="Red Flood Diplo Screen Generator">
     <meta property="og:type" content="website">
-    <meta property="og:description"
-        content="Whoever is posting this link for you to see is likely afflicted with profound mental illnesses.">
+    <meta property="og:description" content="Whoever is posting this link for you to see is likely afflicted with profound mental illnesses.">
     <meta property="og:url" content="https://quark88.github.io/rfgen">
     <meta property="og:image" content="https://quark88.github.io/rfgen/icon.png">
     <meta name="theme-color" content="#00a0ff" data-react-helmet="true">
@@ -74,6 +73,7 @@
         <info>
             <div>Red Flood Diplo Screen Generator</div>
             <div id="smallText">Made by Quark at quark88.github.io/rfgen</div>
+            <div id="popularityAdjuster"></div>
             <buttons>
                 <button id="flagUpload">Upload Flag</button>
                 <button id="portraitUpload">Upload Portrait</button>
@@ -89,6 +89,11 @@
                 <button id="portraitReset">Remove Portrait</button>
                 <button id="focusReset">Remove Focus Icon</button>
             </buttons>
+            <buttons>
+                <button id="randomizeIdeology">Randomize Ideology</button>
+                <button id="randomizeStability">Randomize Stability</button>
+                <button id="randomizeWarSupport">Randomize War Support</button>
+            </buttons>
         </info>
     </left>
     <tools>
@@ -97,14 +102,15 @@
                 <div>Pick ruling ideology</div>
             </ideology>
         </div>
+        <div id="ideologyDescription">Description of the selected ideology</div>
         <div id="subideologyPicker" class="picker">
             <ideology class="title">
                 <div>Pick ruling subideology</div>
             </ideology>
         </div>
-        <div id="popularityAdjuster">
-        </div>
+        <div id="subideologyDescription">Description of the selected subideology</div>
     </tools>
 </body>
 <script type="module" src="./script.js"></script>
+
 </html>
