@@ -20,7 +20,8 @@ body {
 left {
     display: flex;
     flex-direction: column;
-    width: 532px;
+    min-width: 564px;
+    max-width: 564px;
     gap: 8px;
     padding-bottom: 16px;
 }
@@ -311,6 +312,7 @@ info {
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    padding-left: 16px;
 }
 
 info div {
@@ -325,7 +327,7 @@ info div {
 buttons {
     display: flex;
     gap: 8px;
-    padding-left: 16px;
+    width: 100%;
 }
 
 buttons button {
@@ -333,12 +335,14 @@ buttons button {
     border-radius: 4px;
     font-family: futura;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 12px;
     letter-spacing: .5px;
     color: var(--white);
     background-color: var(--button);
     cursor: pointer;
     padding: 12px;
+    width: 100%;
+    height: 48px;
 }
 
 tools {
