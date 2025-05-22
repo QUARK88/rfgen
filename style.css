@@ -382,8 +382,17 @@ ideology {
 ideology:hover,
 buttons button:hover,
 #equalizationButton:hover,
-#randomizationButton:hover {
+#randomizationButton:hover,
+#ideologizationButton:hover {
     filter: brightness(1.1);
+}
+
+ideology:active,
+buttons button:active,
+#equalizationButton:active,
+#randomizationButton:active,
+#ideologizationButton:active {
+    filter: brightness(.9);
 }
 
 ideology img {
@@ -416,13 +425,18 @@ ideology div {
 
 #popularityAdjuster {
     display: flex;
-    flex-wrap: wrap;
-    gap: 16px 10px;
-    justify-content: center;
-    margin: 8px;
+    flex-direction: column;
+    margin: 8px 0;
+    gap: 16px;
 }
 
-#popularityAdjuster button {
+#popularityTools {
+    display: flex;
+    gap: 16px 10px;
+    justify-content: center;
+}
+
+#popularityTools button {
     border: none;
     border-radius: 4px;
     font-family: futura;
@@ -433,7 +447,14 @@ ideology div {
     background-color: var(--button);
     cursor: pointer;
     padding: 12px;
-    width: 128px;
+    width: 100%;
+}
+
+#popularityInputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
 }
 
 .percentageControl {
@@ -444,16 +465,30 @@ ideology div {
 .percentageControl input {
     padding: 8px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     width: 44px;
     border: solid 2px var(--background);
     background-color: var(--white);
+    transition: .15s;
 }
 
 .percentageControl div {
     width: 24px;
     height: 24px;
     cursor: pointer;
+    border: solid 2px var(--background);
+    margin-left: 3px;
+    transition: .15s;
+}
+
+.percentageControl div:hover {
+    filter: brightness(1.1);
+    z-index: 1;
+}
+
+.percentageControl div:active {
+    filter: brightness(.9);
+    z-index: 1;
 }
 
 #smallText {

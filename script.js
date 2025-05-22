@@ -60,7 +60,7 @@ editableDivs.forEach(divId => {
     })
     div.addEventListener("blur", function () { this.removeAttribute("contenteditable") })
 })
-let selectedIdeology = 0
+let selectedIdeology = -1
 let selectedSubideology = -1
 let ideologyButtons = []
 let subideologyButtons = []
@@ -144,18 +144,43 @@ fetch('./descriptions.json')
 let percentages = [5, 5, 0, 0, 0, 0, 10, 10, 15, 40, 15]
 let lockedPercentages = new Array(colors.length).fill(false)
 function createInputs() {
-    const container = document.getElementById("popularityAdjuster")
-    container.innerHTML = ""
+    const toolsDiv = document.getElementById("popularityTools")
+    toolsDiv.innerHTML = ""
+    const inputsDiv = document.getElementById("popularityInputs")
+    inputsDiv.innerHTML = ""
     const equalizeBtn = document.createElement("button")
     equalizeBtn.id = "equalizationButton"
     equalizeBtn.textContent = "Equalize"
     equalizeBtn.addEventListener("click", equalizePercentages)
-    container.appendChild(equalizeBtn)
+    toolsDiv.appendChild(equalizeBtn)
     const randomBtn = document.createElement("button")
     randomBtn.id = "randomizationButton"
     randomBtn.textContent = "Randomize"
     randomBtn.addEventListener("click", randomizePercentages)
-    container.appendChild(randomBtn)
+    toolsDiv.appendChild(randomBtn)
+    const ideologizeBtn = document.createElement("button")
+    ideologizeBtn.id = "ideologizationButton"
+    ideologizeBtn.textContent = "Ideologize"
+    ideologizeBtn.addEventListener("click", ideologizePercentages)
+    toolsDiv.appendChild(ideologizeBtn)
+    const updateControlStates = () => {
+        const unlockedCount = lockedPercentages.filter(locked => !locked).length
+        for (let i = 0; i < colors.length; i++) {
+            const input = document.querySelector(`input[data-index="${i}"]`)
+            const lockBtn = document.querySelector(`div[data-index="${i}"]:nth-child(2)`)
+            const clearBtn = document.querySelector(`div[data-index="${i}"]:last-child`)
+            input.disabled = lockedPercentages[i]
+            input.readOnly = !lockedPercentages[i] && unlockedCount <= 1
+            const bgColor = lockedPercentages[i] ? "#404040" : "#f0f0f0"
+            lockBtn.style.background = `${bgColor} url(./lock.svg) no-repeat center`
+            lockBtn.style.backgroundSize = "60%"
+            clearBtn.style.background = `${bgColor} url(./clear.svg) no-repeat center`
+            clearBtn.style.backgroundSize = "60%"
+        }
+    }
+    const canDistribute = (excludeIndex) => {
+        return lockedPercentages.some((locked, i) => !locked && i !== excludeIndex)
+    }
     for (let i = 0; i < colors.length; i++) {
         const wrapper = document.createElement("div")
         wrapper.className = "percentageControl"
@@ -166,23 +191,80 @@ function createInputs() {
         input.value = percentages[i]
         input.dataset.index = i
         input.style.outline = `3px solid ${colors[i]}`
-        input.addEventListener("input", function () { handlePercentageChange(this) })
-        if (lockedPercentages[i]) input.disabled = true
+        input.addEventListener("input", function () {
+            if (this.readOnly || lockedPercentages[i]) {
+                this.value = percentages[i]
+                return
+            }
+            handlePercentageChange(this)
+        })
         const lockBox = document.createElement("div")
-        lockBox.style.border = `3px solid ${colors[i]}`
-        lockBox.style.backgroundColor = lockedPercentages[i] ? "#404040" : "#f0f0f0"
+        lockBox.style.outline = `3px solid ${colors[i]}`
         lockBox.dataset.index = i
         lockBox.addEventListener("click", function () {
             const idx = parseInt(this.dataset.index)
             lockedPercentages[idx] = !lockedPercentages[idx]
-            this.style.backgroundColor = lockedPercentages[idx] ? "#404040" : "#f0f0f0"
-            const input = document.querySelector(`#popularityAdjuster input[data-index="${idx}"]`)
-            input.disabled = lockedPercentages[idx]
+            updateControlStates()
+        })
+        const clearBox = document.createElement("div")
+        clearBox.style.outline = `3px solid ${colors[i]}`
+        clearBox.dataset.index = i
+        clearBox.addEventListener("click", function () {
+            const idx = parseInt(this.dataset.index)
+            if (!canDistribute(idx)) return
+            const oldValue = percentages[idx]
+            percentages[idx] = 0
+            let remaining = oldValue
+            const unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i] && i !== idx)
+            while (remaining > 0 && unlockedIndices.length > 0) {
+                const minValue = Math.min(...unlockedIndices.map(i => percentages[i]))
+                const minIndices = unlockedIndices.filter(i => percentages[i] === minValue)
+                minIndices.forEach(i => {
+                    if (remaining > 0) {
+                        percentages[i]++
+                        remaining--
+                    }
+                })
+            }
+            updateInputs()
+            updateChart()
+            updateControlStates()
         })
         wrapper.appendChild(input)
         wrapper.appendChild(lockBox)
-        container.appendChild(wrapper)
+        wrapper.appendChild(clearBox)
+        inputsDiv.appendChild(wrapper)
     }
+    updateControlStates()
+}
+function ideologizePercentages() {
+    if (selectedIdeology < 0 || lockedPercentages.some(locked => locked)) return
+    const pattern = [2, 3, 5, 10, 15, 30, 15, 10, 5, 3, 2]
+    let remaining = 100
+    for (let i = 0; i < ideologies.length; i++) {
+        if (lockedPercentages[i]) remaining -= percentages[i]
+        else percentages[i] = 0
+    }
+    const priorityList = []
+    for (let distance = 0; distance < ideologies.length; distance++) {
+        if (selectedIdeology - distance >= 0 && !lockedPercentages[selectedIdeology - distance]) {
+            priorityList.push(selectedIdeology - distance)
+        }
+        if (distance > 0 && selectedIdeology + distance < ideologies.length && !lockedPercentages[selectedIdeology + distance]) {
+            priorityList.push(selectedIdeology + distance)
+        }
+    }
+    const sortedPattern = [...pattern].sort((a, b) => b - a)
+    for (let i = 0; i < Math.min(sortedPattern.length, priorityList.length); i++) percentages[priorityList[i]] = sortedPattern[i]
+    const currentTotal = percentages.reduce((a, b) => a + b, 0)
+    const scaleFactor = remaining / currentTotal
+    for (let i = 0; i < ideologies.length; i++) {
+        if (!lockedPercentages[i]) percentages[i] = Math.round(percentages[i] * scaleFactor)
+    }
+    const total = percentages.reduce((a, b) => a + b, 0)
+    if (total !== 100) percentages[selectedIdeology] += 100 - total
+    updateInputs()
+    updateChart()
 }
 function equalizePercentages() {
     const lockedTotal = percentages.reduce((sum, val, idx) => sum + (lockedPercentages[idx] ? val : 0), 0)
@@ -199,17 +281,25 @@ function equalizePercentages() {
 }
 function handlePercentageChange(input) {
     const index = parseInt(input.dataset.index)
-    if (lockedPercentages[index]) return
+    if (lockedPercentages[index]) {
+        input.value = percentages[index]
+        return
+    }
     const oldValue = percentages[index]
     let newValue = parseInt(input.value) || 0
     newValue = Math.max(0, Math.min(100, newValue))
     const lockedTotal = percentages.reduce((sum, val, i) => sum + (lockedPercentages[i] ? val : 0), 0)
     const maxAllowed = 100 - lockedTotal
-    if (newValue > maxAllowed) newValue = maxAllowed
+    if (newValue > maxAllowed) {
+        newValue = maxAllowed
+        input.value = newValue
+    }
     percentages[index] = newValue
     const difference = newValue - oldValue
     if (difference !== 0) {
-        let unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i] && i !== index).sort((a, b) => percentages[a] - percentages[b])
+        let unlockedIndices = percentages.map((_, i) => i)
+            .filter(i => !lockedPercentages[i] && i !== index)
+            .sort((a, b) => percentages[a] - percentages[b])
         if (difference > 0) {
             let remaining = difference
             unlockedIndices.reverse().forEach(idx => {
@@ -224,7 +314,7 @@ function handlePercentageChange(input) {
             unlockedIndices.forEach(idx => {
                 if (remaining <= 0) return
                 const addition = Math.min(100 - percentages[idx], remaining)
-                percentages[idx] += addition
+                percentages[idx] = Math.max(0, Math.min(100, percentages[idx] + addition))
                 remaining -= addition
             })
         }
@@ -233,7 +323,9 @@ function handlePercentageChange(input) {
     if (currentTotal !== 100) {
         const adjustment = 100 - currentTotal
         const targetIdx = percentages.findIndex((val, i) => !lockedPercentages[i] && i !== index)
-        if (targetIdx !== -1) percentages[targetIdx] += adjustment
+        if (targetIdx !== -1) {
+            percentages[targetIdx] = Math.max(0, Math.min(100, percentages[targetIdx] + adjustment))
+        }
     }
     updateInputs()
     updateChart()
