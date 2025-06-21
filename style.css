@@ -28,8 +28,9 @@ left {
 
 screenshot {
     display: block;
-    min-width: 532px;
-    min-height: 362px;
+    position: absolute;
+    width: 532px;
+    height: 362px;
 }
 
 #overlay {
@@ -305,6 +306,10 @@ screenshot {
     letter-spacing: -1px;
     text-align: center;
     padding: 12px 24px;
+}
+
+spacing {
+    height: 362px;
 }
 
 info {
