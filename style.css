@@ -709,6 +709,10 @@ eventTools {
         padding: 0 16px;
     }
 
+    #eventPage {
+        padding-bottom: 16px;
+    }
+
     info,
     eventleft,
     eventTools {
