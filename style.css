@@ -15,9 +15,15 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: column;
 }
 
-left {
+#diploPage,
+#eventPage {
+    display: flex;
+}
+
+diploLeft {
     display: flex;
     flex-direction: column;
     min-width: 564px;
@@ -29,16 +35,19 @@ left {
 screenshot {
     display: block;
     position: absolute;
+}
+
+#diploScreenshot {
     width: 532px;
     height: 362px;
 }
 
-#overlay {
+#diploOverlay {
     display: block;
     position: absolute;
     width: 532px;
     height: 362px;
-    background-image: url(./Overlay.png);
+    background-image: url(./diploOverlay.png);
 }
 
 #flagOverlay {
@@ -229,6 +238,7 @@ screenshot {
     font-size: 14px;
     letter-spacing: -1px;
     text-align: center;
+    cursor: text;
 }
 
 #bottomNames {
@@ -308,7 +318,8 @@ screenshot {
     padding: 12px 24px;
 }
 
-spacing {
+diploSpacing {
+    display: block;
     height: 362px;
 }
 
@@ -320,21 +331,17 @@ info {
     padding-left: 16px;
 }
 
-info div {
-    color: var(--white);
-    text-align: center;
-    font-family: futura;
-    font-weight: 600;
-    font-size: 28px;
-    letter-spacing: .5px;
-}
-
 buttons {
     display: flex;
     gap: 8px;
     width: 100%;
 }
 
+.switch {
+    font-size: 20px !important;
+}
+
+.switch,
 buttons button {
     border: none;
     border-radius: 4px;
@@ -350,11 +357,62 @@ buttons button {
     height: 48px;
 }
 
-tools {
+diploTools {
     display: flex;
     flex-direction: column;
     gap: 16px;
     padding: 16px;
+}
+
+#advertisementContainer {
+    background: linear-gradient(90deg, #806000, #a08020, #c0a040, #c0a040, #a08020, #806000);
+    background-size: 500% 500%;
+    padding: 3px;
+    border-radius: 11px;
+    animation: glowing 8s linear infinite;
+    animation-direction: reverse;
+}
+
+@keyframes glowing {
+    0% {
+        background-position: 0% 250%;
+    }
+
+    100% {
+        background-position: 250% 500%;
+    }
+}
+
+#advertisement {
+    display: flex;
+    background-color: #00000080;
+    padding: 4px;
+    padding-right: 12px;
+    border: solid 3px #00000080;
+    border-radius: 8px;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#advertisement div {
+    font-family: futura;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: .5px;
+    color: var(--white);
+    flex-grow: 1;
+    text-align: left;
+}
+
+#closeButton {
+    width: 32px;
+    cursor: pointer;
+    transition: ease-in-out .1s;
+}
+
+#closeButton:hover {
+    transform: scale(1.1);
 }
 
 .picker {
@@ -496,8 +554,13 @@ ideology div {
     z-index: 1;
 }
 
-#smallText {
+smallText {
+    color: var(--white);
+    text-align: center;
+    font-family: futura;
+    font-weight: 600;
     font-size: 20px;
+    letter-spacing: .5px;
 }
 
 input:disabled {
@@ -521,8 +584,135 @@ input:disabled {
     font-weight: 500;
 }
 
-@media screen and (max-width: 1200px) {
-    body {
+hr {
+    display: block;
+    margin: 16px;
+    background-color: var(--button);
+    height: 3px;
+    border: none;
+}
+
+#eventPage {
+    gap: 24px
+}
+
+eventLeft {
+    display: flex;
+    flex-direction: column;
+    min-width: 607px;
+    max-width: 607px;
+    gap: 8px;
+    padding-bottom: 16px;
+    padding-left: 6px;
+}
+
+#eventImage {
+    display: block;
+    position: absolute;
+    width: 558px;
+    height: 290px;
+    top: 32px;
+    left: 24px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(./eventImage.png);
+}
+
+#eventOverlay {
+    display: block;
+    position: absolute;
+    width: 607px;
+    height: 534px;
+    background-image: url(./eventOverlay.png);
+}
+
+#eventTitle {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    position: absolute;
+    height: 30px;
+    width: 222px;
+    left: 190px;
+    top: 325px;
+    padding-top: 8px;
+    color: var(--white);
+    font-family: futura;
+    text-align: center;
+    font-weight: 600;
+    font-size: 17px;
+    font-style: italic;
+    letter-spacing: -1px;
+}
+
+#eventQuote {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    position: absolute;
+    height: 126px;
+    width: 476px;
+    left: 65px;
+    top: 345px;
+    padding-top: 30px;
+    color: var(--white);
+    font-family: futura;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -.5px;
+    line-height: 24px;
+}
+
+#country,
+#faction,
+#leader,
+.unity,
+#party,
+#election,
+#focus,
+#eventQuote,
+#eventTitle {
+    cursor: text;
+}
+
+eventSpacing {
+    display: block;
+    height: 534px;
+}
+
+eventTools {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    padding-top: 10px;
+    padding-right: 16px;
+}
+
+#eventButtons {
+    flex-direction: column;
+}
+
+#eventButtons button {
+    height: 80px;
+    font-size: 24px;
+}
+
+@media screen and (max-width: 1120px) {
+
+    #diploPage,
+    #eventPage {
         flex-direction: column;
+        align-items: center;
+        padding: 0 16px;
     }
+
+    info,
+    eventleft,
+    eventTools {
+        padding: 0;
+    }
+
 }

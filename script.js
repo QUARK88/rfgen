@@ -1,3 +1,4 @@
+// You may notice that all of the code in this project is quite abysmal. Indeed it is. For a change, i decided to make a very low-effort botched site because i thought it was funny (It is in fact a lot of fun messing around with this casually). Rest assured that it works perfectly fine, it's just quite goofy and suboptimal.
 const ideologies = ["Accelerationism", "Anarchism", "Vanguard Socialism", "Popular Socialism", "Revisionist Socialism", "Progressivism", "Liberalism", "Conservatism", "Polyarchy", "Despotism", "Reactionism"]
 const accelerationism = ["Fiumanism", "Futurism", "National Rejuvenatism", "Neo-Folkism", "Surrealism", "Technocracy", "Vperedism"]
 const anarchism = ["Individualist Anarchism", "Mystical Anarchism", "National Anarchism", "Naturist Anarchism", "Social Anarchism", "Statelessness", "Stratocratic Anarchism"]
@@ -12,6 +13,15 @@ const despotism = ["Absolute Monarchy", "Constitutional Dictatorship", "Constitu
 const reactionism = ["Aristocratic Reaction", "Reactionary Esotericism", "Reactionary Populism", "Religious Fundamentalism"]
 const subideologyGroups = [accelerationism, anarchism, vanguardSocialism, popularSocialism, revisionistSocialism, progressivism, liberalism, conservatism, polyarchy, despotism, reactionism]
 const colors = ["#f8f8f8", "#a4946e", "#c3350a", "#ec494c", "#ffae43", "#f87f9d", "#f6e86f", "#7197ff", "#6e6e6e", "#292929", "#8046a4"]
+document.getElementById("closeButton").addEventListener("click", () => {
+    sessionStorage.setItem("acknowledgedTheAnnoyingAdvertisement", JSON.stringify(true))
+    document.getElementById("advertisementContainer").style.display = "none"
+})
+document.addEventListener('DOMContentLoaded', () => {
+    if (JSON.parse(sessionStorage.getItem("acknowledgedTheAnnoyingAdvertisement"))) {
+        document.getElementById("advertisementContainer").style.display = "none"
+    }
+})
 function setupImageUpload(buttonId, targetId) {
     document.getElementById(buttonId).addEventListener("click", () => {
         const input = document.createElement("input")
@@ -34,20 +44,38 @@ function setupImageUpload(buttonId, targetId) {
 setupImageUpload("flagUpload", "flag")
 setupImageUpload("portraitUpload", "portrait")
 setupImageUpload("focusUpload", "focusIcon")
+setupImageUpload("eventImageUpload", "eventImage")
 function setupImageEdit(buttonId, targetId) {
+    const options = [
+        ['cover', 'center center'],
+        ['cover', 'bottom center'],
+        ['cover', 'top center'],
+        ['cover', 'left center'],
+        ['cover', 'right center'],
+        ['contain', 'center center'],
+        ['contain', 'bottom center'],
+        ['contain', 'top center'],
+        ['contain', 'left center'],
+        ['contain', 'right center']
+    ]
+    let currentIndex = 0
     document.getElementById(buttonId).addEventListener("click", () => {
         const target = document.getElementById(targetId)
-        target.style.backgroundSize = getComputedStyle(target).backgroundSize.includes("cover") ? "contain" : "cover"
+        currentIndex = (currentIndex + 1) % options.length
+        target.style.backgroundSize = options[currentIndex][0]
+        target.style.backgroundPosition = options[currentIndex][1]
     })
 }
 setupImageEdit("flagEdit", "flag")
 setupImageEdit("portraitEdit", "portrait")
 setupImageEdit("focusEdit", "focusIcon")
+setupImageEdit("eventImageEdit", "eventImage")
 function setupImageReset(buttonId, targetId) { document.getElementById(buttonId).addEventListener("click", () => { document.getElementById(targetId).style.backgroundImage = "none" }) }
 setupImageReset("flagReset", "flag")
 setupImageReset("portraitReset", "portrait")
 setupImageReset("focusReset", "focusIcon")
-const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus"]
+setupImageReset("eventImageReset", "eventImage")
+const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus", "eventTitle", "eventQuote"]
 editableDivs.forEach(divId => {
     const div = document.getElementById(divId)
     div.addEventListener("click", function () {
