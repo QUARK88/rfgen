@@ -10,44 +10,103 @@
     src: url(./futura.ttf);
 }
 
+* {
+    font-family: futura;
+    color: var(--white);
+    text-decoration: none;
+    text-rendering: optimizeLegibility;
+}
+
 body {
     background-color: var(--background);
     margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+    padding: 0 0 16px 0;
 }
 
-#diploPage,
-#eventPage {
+nav {
     display: flex;
+    gap: 3px;
+    background-color: var(--background);
 }
 
-diploLeft {
+nav>div,
+nav>a {
     display: flex;
-    flex-direction: column;
-    min-width: 564px;
-    max-width: 564px;
+    flex: 1 1 0;
+    padding: 8px;
+    font-size: 16px;
+    text-align: center;
+    align-items: center;
+    background-color: var(--button);
+    cursor: pointer;
+}
+
+nav>div:hover,
+nav>a:hover,
+ideology:hover,
+.buttonGroup button:hover,
+#equalizationButton:hover,
+#randomizationButton:hover,
+#ideologizationButton:hover,
+#diploDownload:hover,
+#toleranceSlider:hover,
+#portraitTools button:hover,
+.backgroundContainer:hover {
+    filter: brightness(1.1);
+}
+
+#logo {
+    display: flex;
     gap: 8px;
-    padding-bottom: 16px;
 }
 
-screenshot {
-    display: block;
-    position: absolute;
+#logo img {
+    height: 32px;
+    width: 32px;
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
+.navButton {
+    justify-content: center;
+}
+
+#diploSection {
+    display: grid;
+    grid-template-columns: 564px 1fr;
+    grid-template-rows: 362px min-content;
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
 }
 
 #diploScreenshot {
     width: 532px;
     height: 362px;
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+#diploFront {
+    position: absolute;
+    z-index: 2;
 }
 
 #diploOverlay {
     display: block;
     position: absolute;
+    z-index: 1;
     width: 532px;
     height: 362px;
     background-image: url(./diploOverlay.png);
+}
+
+#diploBack {
+    position: absolute;
+    z-index: 0;
 }
 
 #flagOverlay {
@@ -262,7 +321,7 @@ screenshot {
     height: 155px;
     left: 16px;
     top: 161px;
-    background-image: url(./Default.png);
+    background-image: url(./portraitBackground/General.png);
 }
 
 #portrait {
@@ -272,7 +331,7 @@ screenshot {
     background-size: contain;
     background-position: bottom;
     background-repeat: no-repeat;
-    background-image: url(./Schleicher.png);
+    background-image: url(./Wrangel.png);
 }
 
 #pieChart {
@@ -305,8 +364,8 @@ screenshot {
     align-items: center;
     justify-content: center;
     position: absolute;
-    width: 215px;
-    height: 48px;
+    width: 223px;
+    height: 72px;
     left: 244px;
     top: 244px;
     color: var(--white);
@@ -315,104 +374,15 @@ screenshot {
     font-size: 16px;
     letter-spacing: -1px;
     text-align: center;
-    padding: 12px 24px;
+    padding: 0 20px;
 }
 
-diploSpacing {
-    display: block;
-    height: 362px;
-}
-
-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    padding-left: 16px;
-}
-
-buttons {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-}
-
-.switch {
-    font-size: 20px !important;
-}
-
-.switch,
-buttons button {
-    border: none;
-    border-radius: 4px;
-    font-family: futura;
-    font-weight: 600;
-    font-size: 12px;
-    letter-spacing: .5px;
-    color: var(--white);
-    background-color: var(--button);
-    cursor: pointer;
-    padding: 12px;
-    width: 100%;
-    height: 48px;
-}
-
-diploTools {
+#diploIdeologyMenu {
+    grid-area: 1 / 2 / 3 / 3;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 16px;
-}
-
-#advertisementContainer {
-    background: linear-gradient(90deg, #806000, #a08020, #c0a040, #c0a040, #a08020, #806000);
-    background-size: 500% 500%;
-    padding: 3px;
-    border-radius: 11px;
-    animation: glowing 8s linear infinite;
-    animation-direction: reverse;
-}
-
-@keyframes glowing {
-    0% {
-        background-position: 0% 250%;
-    }
-
-    100% {
-        background-position: 250% 500%;
-    }
-}
-
-#advertisement {
-    display: flex;
-    background-color: #00000080;
-    padding: 4px;
-    padding-right: 12px;
-    border: solid 3px #00000080;
-    border-radius: 8px;
-    gap: 8px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-#advertisement div {
-    font-family: futura;
-    font-weight: 600;
-    font-size: 18px;
-    letter-spacing: .5px;
-    color: var(--white);
-    flex-grow: 1;
-    text-align: left;
-}
-
-#closeButton {
-    width: 32px;
-    cursor: pointer;
-    transition: ease-in-out .1s;
-}
-
-#closeButton:hover {
-    transform: scale(1.1);
+    padding: 16px 16px 0 0;
 }
 
 .picker {
@@ -442,19 +412,13 @@ ideology {
     outline-offset: -6px;
 }
 
-ideology:hover,
-buttons button:hover,
-#equalizationButton:hover,
-#randomizationButton:hover,
-#ideologizationButton:hover {
-    filter: brightness(1.1);
-}
-
 ideology:active,
-buttons button:active,
+.buttonGroup button:active,
 #equalizationButton:active,
 #randomizationButton:active,
-#ideologizationButton:active {
+#ideologizationButton:active,
+#diploDownload:active,
+#portraitTools button:active {
     filter: brightness(.9);
 }
 
@@ -486,22 +450,61 @@ ideology div {
     cursor: auto;
 }
 
-#popularityAdjuster {
+#ideologyDescription,
+#subideologyDescription {
+    background-color: var(--button);
+    border-radius: 3px;
+    font-family: sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: .5px;
+    color: var(--white);
+    padding: 12px;
+}
+
+#subideologyDescription {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+#diploTools {
+    grid-area: 2 / 1 / 3 / 2;
+    padding-left: 16px;
     display: flex;
     flex-direction: column;
-    margin: 8px 0;
-    gap: 16px;
+    gap: 8px;
 }
 
-#popularityTools {
+#diploTools>* {
+    flex: none;
+}
+
+.buttonGroup {
     display: flex;
-    gap: 16px 10px;
-    justify-content: center;
+    gap: 8px;
+    flex-grow: 1;
 }
 
-#popularityTools button {
+.buttonGroup button {
     border: none;
-    border-radius: 4px;
+    border-radius: 3px;
+    font-family: futura;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .5px;
+    color: var(--white);
+    background-color: var(--button);
+    cursor: pointer;
+    padding: 12px;
+    width: 100%;
+    height: 48px;
+}
+
+#popularityTools button,
+#diploDownload,
+#portraitTools button {
+    border: none;
+    border-radius: 3px;
     font-family: futura;
     font-weight: 600;
     font-size: 16px;
@@ -517,6 +520,7 @@ ideology div {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+    margin: 8px 0;
     justify-content: center;
 }
 
@@ -533,6 +537,7 @@ ideology div {
     border: solid 2px var(--background);
     background-color: var(--white);
     transition: .15s;
+    color: var(--background);
 }
 
 .percentageControl div {
@@ -554,60 +559,41 @@ ideology div {
     z-index: 1;
 }
 
-smallText {
-    color: var(--white);
-    text-align: center;
-    font-family: futura;
-    font-weight: 600;
-    font-size: 20px;
-    letter-spacing: .5px;
-}
-
 input:disabled {
     background-color: var(--button);
-}
-
-#ideologyDescription,
-#subideologyDescription {
-    background-color: var(--button);
-    border-radius: 4px;
-    font-family: sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: .5px;
     color: var(--white);
-    padding: 12px;
 }
 
-#subideologyDescription {
-    font-size: 12px;
-    font-weight: 500;
-}
-
-hr {
-    display: block;
-    margin: 16px;
-    background-color: var(--button);
-    height: 3px;
-    border: none;
-}
-
-#eventPage {
-    gap: 24px
-}
-
-eventLeft {
+#eventSection {
     display: flex;
-    flex-direction: column;
-    min-width: 607px;
-    max-width: 607px;
-    gap: 8px;
-    padding-bottom: 16px;
-    padding-left: 6px;
+    margin: 16px 16px 0 16px;
+    gap: 16px;
+}
+
+#eventScreenshot {
+    width: 607px;
+    height: 534px;
+}
+
+#eventFront {
+    position: absolute;
+    z-index: 2;
+}
+
+#eventOverlay {
+    z-index: 1;
+    position: absolute;
+    width: 607px;
+    height: 534px;
+    background-image: url(./eventOverlay.png);
+}
+
+#eventBack {
+    z-index: 0;
+    position: absolute;
 }
 
 #eventImage {
-    display: block;
     position: absolute;
     width: 558px;
     height: 290px;
@@ -617,14 +603,6 @@ eventLeft {
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url(./eventImage.png);
-}
-
-#eventOverlay {
-    display: block;
-    position: absolute;
-    width: 607px;
-    height: 534px;
-    background-image: url(./eventOverlay.png);
 }
 
 #eventTitle {
@@ -698,25 +676,158 @@ eventTools {
 #eventButtons button {
     height: 80px;
     font-size: 24px;
+    flex-grow: 1;
+}
+
+#portraitSection {
+    display: grid;
+    grid-template-columns: 644px 1fr;
+    grid-template-rows: 256px min-content;
+}
+
+#portraitViewer {
+    grid-area: 1 / 1 / 2 / 2;
+    display: flex;
+    height: 256px;
+    align-items: center;
+    justify-content: center;
+}
+
+#portraitScreenshot {
+    width: 156px;
+    height: 210px;
+    background-size: contain;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-image: url(./portraitPlaceholder.png);
+    background-color: #fff;
+}
+
+#portraitTools {
+    grid-area: 2 / 1 / 3 / 2;
+    padding: 16px 16px 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#portraitTools button {
+    height: 64px;
+}
+
+#toleranceValue {
+    font-size: 24px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#toleranceSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: var(--button);
+    height: 32px;
+    border-radius: 3px;
+    margin: 0;
+    cursor: pointer;
+}
+
+#toleranceSlider::-webkit-slider-thumb,
+#toleranceSlider::-moz-range-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+    border: none;
+    background-color: var(--white);
+}
+
+#portraitButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+}
+
+#backgroundTools {
+    grid-area: 1 / 2 / 3 / 3;
+    padding: 16px 16px 0 16px;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+}
+
+#backgroundTooltip {
+    font-size: 32px;
+}
+
+.backgroundNotice {
+    font-size: 20px;
+}
+
+#backgroundSelector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.backgroundContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc((100%/6) - 13px);
+    cursor: pointer;
+    outline: var(--background) solid 3px;
+    border: var(--button) solid 3px;
+    border-radius: 3px;
+}
+
+.selectedBackground {
+    border: var(--button) solid 3px;
+    outline: var(--white) solid 3px;
+}
+
+.backgroundContainer img {
+    width: 100%;
+}
+
+.backgroundContainer div {
+    position: absolute;
+    color: var(--white);
+    text-shadow: #000 0 0 1px, #000 0 0 2px, #000 0 0 3px;
+    text-align: center;
+    font-size: 12px;
+    padding: 8px 4px;
 }
 
 @media screen and (max-width: 1120px) {
 
-    #diploPage,
-    #eventPage {
+    #diploSection,
+    #eventSection,
+    #portraitSection {
+        display: flex;
         flex-direction: column;
-        align-items: center;
+    }
+
+    #diploTools,
+    #diploIdeologyMenu {
         padding: 0 16px;
     }
 
-    #eventPage {
-        padding-bottom: 16px;
+    #popularityInputs {
+        gap: 16px;
+        margin: 8px 0;
     }
 
-    info,
-    eventleft,
-    eventTools {
-        padding: 0;
+    #eventSection {
+        align-items: center;
     }
 
+    #eventButtons {
+        width: 100%;
+    }
 }

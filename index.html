@@ -41,111 +41,135 @@
     <link rel="preload" href="./flagAnimation/25.png" as="image">
     <link rel="preload" href="./flagAnimation/26.png" as="image">
     <link rel="preload" href="./flagAnimation/27.png" as="image">
+    <script type="module" src="./script.js"></script>
 </head>
 
 <body>
-    <page id="diploPage">
-        <diploLeft>
-            <screenshot id="diploScreenshot">
-                <flag id="flag"></flag>
-                <div id="flagOverlay"></div>
-                <div id="portraitBackground">
-                    <div id="portrait"></div>
+    <nav>
+        <a id="logo" href="https://youtu.be/nBZJUvqg2os" target="_blank" title="🇪🇺">
+            <img src="./icon.png">
+            <div>Red Flood Generator by Quark</div>
+        </a>
+        <div class="navButton" id="page1Button">Diplomatic Screen Generator</div>
+        <div class="navButton" id="page2Button">Super Event Generator</div>
+        <div class="navButton" id="page3Button">Portrait Background Remover</div>
+    </nav>
+    <div id="page1">
+        <section id="diploSection">
+            <div id="diploScreenshot">
+                <div id="diploFront">
+                    <div id="icon"></div>
+                    <div id="topNames">
+                        <div id="country">Click to edit country name</div>
+                        <div id="faction">Click to edit faction name</div>
+                        <div id="leader">Click to edit leader name</div>
+                    </div>
+                    <div id="stability" class="unity">50%</div>
+                    <div id="warSupport" class="unity">50%</div>
+                    <div id="bottomNames">
+                        <div id="party">Click to edit party name</div>
+                        <div id="ideology">Ideology Name</div>
+                        <div id="subideology">Subideology Name</div>
+                        <div id="election">Click to edit election type</div>
+                    </div>
+                    <div id="focusIcon"></div>
+                    <div id="focus">Click to edit national focus</div>
                 </div>
-                <div id="pieChart"></div>
                 <div id="diploOverlay"></div>
-                <div id="icon"></div>
-                <div id="topNames">
-                    <div id="country">Click to edit country name</div>
-                    <div id="faction">Click to edit faction name</div>
-                    <div id="leader">Click to edit leader name</div>
+                <div id="diploBack">
+                    <div id="flag"></div>
+                    <div id="flagOverlay"></div>
+                    <div id="portraitBackground">
+                        <div id="portrait"></div>
+                    </div>
+                    <div id="pieChart"></div>
                 </div>
-                <div id="stability" class="unity">50%</div>
-                <div id="warSupport" class="unity">50%</div>
-                <div id="bottomNames">
-                    <div id="party">Click to edit party name</div>
-                    <div id="ideology">Ideology Name</div>
-                    <div id="subideology">Subideology Name</div>
-                    <div id="election">Click to edit election type</div>
-                </div>
-                <div id="focusIcon"></div>
-                <div id="focus">Click to edit national focus</div>
-            </screenshot>
-            <diploSpacing></diploSpacing>
-            <info>
-                <smallText>Red Flood Generator</smallText>
-                <smallText>Made by Quark at quark88.github.io/rfgen</smallText>
-                <div id="popularityAdjuster">
-                    <div id="popularityTools"></div>
-                    <div id="popularityInputs"></div>
-                </div>
-                <buttons>
+            </div>
+            <div id="diploTools">
+                <div class="buttonGroup" id="popularityTools"></div>
+                <div id="popularityInputs"></div>
+                <button id="diploDownload">Download Image</button>
+                <div class="buttonGroup">
                     <button id="flagUpload">Upload Flag</button>
                     <button id="portraitUpload">Upload Portrait</button>
                     <button id="focusUpload">Upload Focus Icon</button>
-                </buttons>
-                <buttons>
+                </div>
+                <div class="buttonGroup">
                     <button id="flagEdit">Edit Flag</button>
                     <button id="portraitEdit">Edit Portrait</button>
                     <button id="focusEdit">Edit Focus Icon</button>
-                </buttons>
-                <buttons>
+                </div>
+                <div class="buttonGroup">
                     <button id="flagReset">Remove Flag</button>
                     <button id="portraitReset">Remove Portrait</button>
                     <button id="focusReset">Remove Focus Icon</button>
-                </buttons>
-                <buttons>
+                </div>
+                <div class="buttonGroup">
                     <button id="randomizeIdeology">Randomize Ideology</button>
                     <button id="randomizeStability">Randomize Stability</button>
                     <button id="randomizeWarSupport">Randomize War Support</button>
-                </buttons>
-            </info>
-        </diploLeft>
-        <diploTools>
-            <div id="advertisementContainer">
-                <div id="advertisement">
-                    <img src="new.png">
-                    <div>You may now generate super-events at the bottom of this page!</div>
-                    <img src="close.png" id="closeButton" title="Close">
                 </div>
             </div>
-            <div id="ideologyPicker" class="picker">
-                <ideology class="title">
-                    <div>Pick ruling ideology</div>
-                </ideology>
+            <div id="diploIdeologyMenu">
+                <div id="ideologyPicker" class="picker">
+                    <ideology class="title">
+                        <div>Pick ruling ideology</div>
+                    </ideology>
+                </div>
+                <div id="ideologyDescription">Description of the selected ideology</div>
+                <div id="subideologyPicker" class="picker">
+                    <ideology class="title">
+                        <div>Pick ruling subideology</div>
+                    </ideology>
+                </div>
+                <div id="subideologyDescription">Description of the selected subideology</div>
             </div>
-            <div id="ideologyDescription">Description of the selected ideology</div>
-            <div id="subideologyPicker" class="picker">
-                <ideology class="title">
-                    <div>Pick ruling subideology</div>
-                </ideology>
-            </div>
-            <div id="subideologyDescription">Description of the selected subideology</div>
-        </diploTools>
-    </page>
-    <hr>
-    <page id="eventPage">
-        <eventLeft>
-            <screenshot id="eventScreenshot">
-                <div id="eventImage"></div>
+        </section>
+    </div>
+    <div id="page2">
+        <section id="eventSection">
+            <div id="eventScreenshot">
+                <div id="eventFront">
+                    <div id="eventQuote">Click to edit event quote<br>- Quote speaker suggested</div>
+                    <div id="eventTitle">Click to edit event title</div>
+                </div>
                 <div id="eventOverlay"></div>
-                <div id="eventQuote">Click to edit event quote<br>- Quote speaker suggested</div>
-                <div id="eventTitle">Click to edit event title</div>
-            </screenshot>
-            <eventSpacing></eventSpacing>
-            <info></info>
-        </eventLeft>
-        <eventTools>
-            <buttons id="eventButtons">
+                <div id="eventBack">
+                    <div id="eventImage"></div>
+                </div>
+            </div>
+            <div class="buttonGroup" id="eventButtons">
                 <button id="eventImageUpload">Upload Event Image</button>
                 <button id="eventImageEdit">Edit Event Image</button>
                 <button id="eventImageReset">Remove Event Image</button>
-            </buttons>
-            <smallText>Note: The way the "edit image" buttons work for the flag, portrait, focus icon and event image is through cycling through sizes and positions, so don't be surprised if it appears to be doing nothing, click a few times more and you may notice some changes.</smallText>
-            <smallText>As far as i'm aware, there exists no JavaScript modules that allow me to add a "download button" of any kind to facilitate saving the created content without crashing the browser, so yeah don't ask for that, unless you know a way to do it. Keep screenshotting.</smallText>
-        </eventTools>
-    </page>
+                <button id="eventDownload">Download Image</button>
+            </div>
+        </section>
+    </div>
+    <div id="page3">
+        <section id="portraitSection">
+            <div id="portraitViewer">
+                <div id="portraitScreenshot"></div>
+            </div>
+            <div id="portraitTools">
+                <div id="toleranceValue">Tolerance: 20.0</div>
+                <input type="range" id="toleranceSlider" min="0" max="50" step="0.1">
+                <div id="portraitButtons">
+                    <button id="isolatedToggle" class="active">Hide Isolated Pixels</button>
+                    <button id="portraitColor">Turn Background Black</button>
+                    <input type="file" id="portraitUpload2" accept="image/*" style="display: none;">
+                    <button onclick="document.getElementById('portraitUpload2').click()">Upload Portrait</button>
+                    <button id="portraitDownload">Download Image</button>
+                </div>
+            </div>
+            <div id="backgroundTools">
+                <div id="backgroundTooltip">Select background to remove</div>
+                <div class="backgroundNotice">The backgrounds get sorted automatically by likeliness, and the top one gets picked, but sometimes it might be wrong. Try several of them.</div>
+                <div id="backgroundSelector"></div>
+                <div class="backgroundNotice">It's not perfect, but it's something.</div>
+            </div>
+        </section>
+    </div>
 </body>
-<script type="module" src="./script.js"></script>
 
 </html>

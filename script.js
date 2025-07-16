@@ -1,4 +1,9 @@
 // You may notice that all of the code in this project is quite abysmal. Indeed it is. For a change, i decided to make a very low-effort botched site because i thought it was funny (It is in fact a lot of fun messing around with this casually). Rest assured that it works perfectly fine, it's just quite goofy and suboptimal.
+import * as htmlToImage from "https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/+esm"
+const page1 = document.getElementById("page1")
+const page2 = document.getElementById("page2")
+const page3 = document.getElementById("page3")
+const pages = [page1, page2, page3]
 const ideologies = ["Accelerationism", "Anarchism", "Vanguard Socialism", "Popular Socialism", "Revisionist Socialism", "Progressivism", "Liberalism", "Conservatism", "Polyarchy", "Despotism", "Reactionism"]
 const accelerationism = ["Fiumanism", "Futurism", "National Rejuvenatism", "Neo-Folkism", "Surrealism", "Technocracy", "Vperedism"]
 const anarchism = ["Individualist Anarchism", "Mystical Anarchism", "National Anarchism", "Naturist Anarchism", "Social Anarchism", "Statelessness", "Stratocratic Anarchism"]
@@ -13,14 +18,358 @@ const despotism = ["Absolute Monarchy", "Constitutional Dictatorship", "Constitu
 const reactionism = ["Aristocratic Reaction", "Reactionary Esotericism", "Reactionary Populism", "Religious Fundamentalism"]
 const subideologyGroups = [accelerationism, anarchism, vanguardSocialism, popularSocialism, revisionistSocialism, progressivism, liberalism, conservatism, polyarchy, despotism, reactionism]
 const colors = ["#f8f8f8", "#a4946e", "#c3350a", "#ec494c", "#ffae43", "#f87f9d", "#f6e86f", "#7197ff", "#6e6e6e", "#292929", "#8046a4"]
-document.getElementById("closeButton").addEventListener("click", () => {
-    sessionStorage.setItem("acknowledgedTheAnnoyingAdvertisement", JSON.stringify(true))
-    document.getElementById("advertisementContainer").style.display = "none"
-})
-document.addEventListener('DOMContentLoaded', () => {
-    if (JSON.parse(sessionStorage.getItem("acknowledgedTheAnnoyingAdvertisement"))) {
-        document.getElementById("advertisementContainer").style.display = "none"
+function show(page) {
+    pages.forEach(element => {
+        element.style.display = "none"
+    })
+    page.style.display = "block"
+}
+show(page1)
+document.getElementById("page1Button").addEventListener("click", () => { show(page1) })
+document.getElementById("page2Button").addEventListener("click", () => { show(page2) })
+document.getElementById("page3Button").addEventListener("click", () => { show(page3) })
+document.getElementById("diploDownload").addEventListener("click", async () => {
+    try {
+        const element = document.getElementById("diploScreenshot")
+        if (!element) throw new Error("Element not found")
+        const clone = element.cloneNode(true)
+        clone.style.position = 'fixed'
+        clone.style.top = '0'
+        clone.style.left = '0'
+        clone.style.zIndex = '999999'
+        clone.style.visibility = 'hidden'
+        clone.style.background = 'transparent'
+        document.body.appendChild(clone)
+        const clonedFlag = clone.querySelector("#flagOverlay")
+        if (clonedFlag) {
+            clonedFlag.style.animation = 'none'
+            clonedFlag.style.backgroundImage = 'url("./flagAnimation/23.png")'
+        }
+        await new Promise(resolve => setTimeout(resolve, 50))
+        clone.style.visibility = 'visible'
+        const options = {
+            backgroundColor: null,
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+            cacheBust: true
+        }
+        const dataURL = await htmlToImage.toPng(clone, options)
+        const link = document.createElement("a")
+        link.href = dataURL
+        link.download = `Red Flood ${leader} ${country}.png`
+        document.body.appendChild(link)
+        link.click()
+        setTimeout(() => document.body.removeChild(link), 100)
+
+    } catch (error) {
+        console.error("Screenshot failed:", error)
+        alert("Screenshot downloading is not supported on this browser. Chrome-based browsers seem to work just fine, so you might wanna try there. Not my fault the modules suck, i'm a Firefox user myself and this pisses me off.")
+    } finally {
+        const clones = document.querySelectorAll('#diploScreenshot[style*="fixed"]')
+        clones.forEach(clone => document.body.removeChild(clone))
     }
+})
+document.getElementById("eventDownload").addEventListener("click", async () => {
+    try {
+        const element = document.getElementById("eventScreenshot")
+        if (!element) throw new Error("Element not found")
+        const clone = element.cloneNode(true)
+        clone.style.position = 'fixed'
+        clone.style.top = '0'
+        clone.style.left = '0'
+        clone.style.zIndex = '999999'
+        clone.style.visibility = 'hidden'
+        clone.style.background = 'transparent'
+        document.body.appendChild(clone)
+        await new Promise(resolve => setTimeout(resolve, 50))
+        clone.style.visibility = 'visible'
+        const options = {
+            backgroundColor: null,
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+            cacheBust: true
+        }
+        const dataURL = await htmlToImage.toPng(clone, options)
+        const link = document.createElement("a")
+        link.href = dataURL
+        link.download = `Red Flood Event ${eventTitle}.png`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    } catch (error) {
+        console.error("Screenshot failed:", error)
+        alert("Screenshot downloading is not supported on this browser. Chrome-based browsers seem to work just fine, so you might wanna try there. Not my fault the modules suck, i'm a Firefox user myself and this pisses me off.")
+    } finally {
+        const clones = document.querySelectorAll('#eventScreenshot[style*="fixed"]')
+        clones.forEach(clone => document.body.removeChild(clone))
+    }
+})
+document.getElementById("portraitDownload").addEventListener("click", async () => {
+    try {
+        const element = document.getElementById("portraitScreenshot")
+        if (!element) throw new Error("Element not found")
+        const clone = element.cloneNode(true)
+        clone.style.position = 'fixed'
+        clone.style.top = '0'
+        clone.style.left = '0'
+        clone.style.zIndex = '999999'
+        clone.style.visibility = 'hidden'
+        clone.style.backgroundColor = 'transparent'
+        document.body.appendChild(clone)
+        await new Promise(resolve => setTimeout(resolve, 50))
+        clone.style.visibility = 'visible'
+        const options = {
+            backgroundColor: null,
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+            cacheBust: true
+        }
+        const dataURL = await htmlToImage.toPng(clone, options)
+        const link = document.createElement("a")
+        link.href = dataURL
+        link.download = `Red Flood Portrait.png`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    } catch (error) {
+        console.error("Screenshot failed:", error)
+        alert("Screenshot downloading is not supported on this browser. Chrome-based browsers seem to work just fine, so you might wanna try there. Not my fault the modules suck, i'm a Firefox user myself and this pisses me off.")
+    } finally {
+        const clones = document.querySelectorAll('#portraitScreenshot[style*="fixed"]')
+        clones.forEach(clone => document.body.removeChild(clone))
+    }
+})
+const state = {
+    uploadedImage: null,
+    selectedBackground: null,
+    tolerance: 20,
+    hideIsolated: true,
+    backgrounds: [...ideologies, "General"],
+    hasUploadedImage: false,
+    isProcessing: false,
+    isSortingBackgrounds: false,
+    backgroundWhite: true
+}
+const elements = {
+    portraitScreenshot: document.getElementById("portraitScreenshot"),
+    toleranceSlider: document.getElementById("toleranceSlider"),
+    toleranceValue: document.getElementById("toleranceValue"),
+    isolatedToggle: document.getElementById("isolatedToggle"),
+    backgroundSelector: document.getElementById("backgroundSelector"),
+    portraitUpload2: document.getElementById("portraitUpload2"),
+    portraitColor: document.getElementById("portraitColor")
+}
+const initializePlaceholder = () => {
+    elements.portraitScreenshot.style.background = `url('./portraitPlaceholder.png') center/cover no-repeat,white`
+    elements.portraitScreenshot.innerHTML = ''
+    state.hasUploadedImage = false
+}
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => resolve(img)
+        img.onerror = reject
+        img.src = src
+    })
+}
+function findEdgeConnectedPixels(diffMap, width, height) {
+    const edgeMap = new Uint8Array(diffMap.length)
+    const queue = []
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const idx = y * width + x
+            if ((x === 0 || x === width - 1 || y === 0 || y === height - 1) && diffMap[idx]) {
+                queue.push([x, y])
+                edgeMap[idx] = 1
+            }
+        }
+    }
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+    while (queue.length) {
+        const [x, y] = queue.shift()
+        for (const [dx, dy] of dirs) {
+            const nx = x + dx, ny = y + dy
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                const nIdx = ny * width + nx
+                if (diffMap[nIdx] && !edgeMap[nIdx]) {
+                    edgeMap[nIdx] = 1
+                    queue.push([nx, ny])
+                }
+            }
+        }
+    }
+    return edgeMap
+}
+document.getElementById('portraitColor').addEventListener('click', toggleBackgroundColor)
+async function processImage() {
+    if (!state.uploadedImage || !state.selectedBackground || state.isSortingBackgrounds) return
+    state.isProcessing = true
+    try {
+        const [compositeImg, bgImg] = await Promise.all([
+            loadImage(state.uploadedImage),
+            loadImage(`./portraitBackground/${state.selectedBackground}.png`)
+        ])
+        const canvas = document.createElement('canvas')
+        canvas.width = 156
+        canvas.height = 210
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = state.backgroundWhite ? '#fff' : '#000'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        const bgScale = Math.max(canvas.width / bgImg.width, canvas.height / bgImg.height)
+        const bgX = (canvas.width - bgImg.width * bgScale) / 2
+        const bgY = (canvas.height - bgImg.height * bgScale) / 2
+        ctx.drawImage(bgImg, bgX, bgY, bgImg.width * bgScale, bgImg.height * bgScale)
+        const bgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        const compScale = Math.max(canvas.width / compositeImg.width, canvas.height / compositeImg.height)
+        const compX = (canvas.width - compositeImg.width * compScale) / 2
+        const compY = (canvas.height - compositeImg.height * compScale) / 2
+        ctx.drawImage(compositeImg, compX, compY, compositeImg.width * compScale, compositeImg.height * compScale)
+        const compositeData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        const diffMap = new Uint8Array(compositeData.data.length / 4)
+        for (let i = 0; i < compositeData.data.length; i += 4) {
+            const rDiff = Math.abs(compositeData.data[i] - bgData.data[i])
+            const gDiff = Math.abs(compositeData.data[i + 1] - bgData.data[i + 1])
+            const bDiff = Math.abs(compositeData.data[i + 2] - bgData.data[i + 2])
+            diffMap[i / 4] = (rDiff < state.tolerance && gDiff < state.tolerance && bDiff < state.tolerance) ? 1 : 0
+        }
+        if (state.hideIsolated) {
+            const edgeMap = findEdgeConnectedPixels(diffMap, canvas.width, canvas.height)
+            for (let i = 0; i < compositeData.data.length; i += 4) {
+                if (diffMap[i / 4] && !edgeMap[i / 4]) diffMap[i / 4] = 0
+            }
+        }
+        for (let i = 0; i < compositeData.data.length; i += 4) {
+            if (diffMap[i / 4]) compositeData.data[i + 3] = 0
+        }
+        ctx.putImageData(compositeData, 0, 0)
+        const resultImg = new Image()
+        resultImg.src = canvas.toDataURL()
+        elements.portraitScreenshot.innerHTML = ''
+        elements.portraitScreenshot.appendChild(resultImg)
+    } catch (error) {
+        console.error("Image processing error:", error)
+    } finally {
+        state.isProcessing = false
+    }
+}
+async function sortBackgroundsByRemoval(compositeImg) {
+    const backgroundScores = []
+    const SORTING_TOLERANCE = 20
+    for (const ideology of state.backgrounds) {
+        try {
+            const bgImg = await loadImage(`./portraitBackground/${ideology}.png`)
+            const canvas = document.createElement('canvas')
+            canvas.width = 156
+            canvas.height = 210
+            const ctx = canvas.getContext('2d')
+            const bgScale = Math.max(canvas.width / bgImg.width, canvas.height / bgImg.height)
+            const bgX = (canvas.width - bgImg.width * bgScale) / 2
+            const bgY = (canvas.height - bgImg.height * bgScale) / 2
+            ctx.drawImage(bgImg, bgX, bgY, bgImg.width * bgScale, bgImg.height * bgScale)
+            const bgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            const compScale = Math.max(canvas.width / compositeImg.width, canvas.height / compositeImg.height)
+            const compX = (canvas.width - compositeImg.width * compScale) / 2
+            const compY = (canvas.height - compositeImg.height * compScale) / 2
+            ctx.drawImage(compositeImg, compX, compY, compositeImg.width * compScale, compositeImg.height * compScale)
+            const compositeData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            let removedPixels = 0
+            for (let i = 0; i < compositeData.data.length; i += 4) {
+                const rDiff = Math.abs(compositeData.data[i] - bgData.data[i])
+                const gDiff = Math.abs(compositeData.data[i + 1] - bgData.data[i + 1])
+                const bDiff = Math.abs(compositeData.data[i + 2] - bgData.data[i + 2])
+                if (rDiff < SORTING_TOLERANCE && gDiff < SORTING_TOLERANCE && bDiff < SORTING_TOLERANCE) {
+                    removedPixels++
+                }
+            }
+            backgroundScores.push({ ideology, score: removedPixels })
+        } catch (e) {
+            console.error(`Error processing ${ideology}:`, e)
+        }
+    }
+    return backgroundScores.sort((a, b) => b.score - a.score).map(item => item.ideology)
+}
+elements.portraitUpload2.addEventListener("change", async function (e) {
+    const file = e.target.files[0]
+    if (!file) return
+    state.isSortingBackgrounds = true
+    const reader = new FileReader()
+    reader.onload = async function (e) {
+        state.uploadedImage = e.target.result
+        state.hasUploadedImage = true
+        elements.portraitScreenshot.innerHTML = ''
+        elements.portraitScreenshot.style.background = state.backgroundWhite ? '#fff' : '#000'
+        const img = new Image()
+        img.onload = async () => {
+            const sortedBackgrounds = await sortBackgroundsByRemoval(img)
+            if (sortedBackgrounds.length > 0) {
+                state.selectedBackground = sortedBackgrounds[0]
+                rebuildBackgroundSelector(sortedBackgrounds)
+                state.isSortingBackgrounds = false
+                await processImage()
+            }
+        }
+        img.src = state.uploadedImage
+    }
+    reader.readAsDataURL(file)
+})
+function toggleBackgroundColor() {
+    if (!elements.portraitColor) return
+    state.backgroundWhite = !state.backgroundWhite
+    elements.portraitColor.textContent = state.backgroundWhite ? 'Turn Background Black' : 'Turn Background White'
+    elements.portraitScreenshot.style.backgroundColor = state.backgroundWhite ? '#fff' : '#000'
+    if (state.hasUploadedImage) processImage()
+}
+function rebuildBackgroundSelector(backgrounds) {
+    elements.backgroundSelector.innerHTML = ''
+    backgrounds.forEach(ideology => {
+        const container = document.createElement('div')
+        container.classList.add('backgroundContainer')
+        if (ideology === state.selectedBackground) {
+            container.classList.add('selectedBackground')
+        }
+        const img = document.createElement('img')
+        img.src = `./portraitBackground/${ideology}.png`
+        const name = document.createElement('div')
+        name.textContent = ideology
+        container.addEventListener('click', async () => {
+            if (state.isProcessing || state.isSortingBackgrounds) return
+            document.querySelectorAll('.backgroundContainer').forEach(c => {
+                c.classList.remove('selectedBackground')
+            })
+            container.classList.add('selectedBackground')
+            state.selectedBackground = ideology
+            await processImage()
+        })
+        container.appendChild(img)
+        container.appendChild(name)
+        elements.backgroundSelector.appendChild(container)
+    })
+}
+function updateTolerance() {
+    state.tolerance = parseFloat(elements.toleranceSlider.value)
+    elements.toleranceValue.textContent = `Tolerance: ${state.tolerance.toFixed(1)}`
+    if (state.hasUploadedImage) {
+        requestAnimationFrame(() => {
+            processImage()
+        })
+    }
+}
+function toggleIsolated() {
+    state.hideIsolated = !state.hideIsolated
+    elements.isolatedToggle.classList.toggle('active', state.hideIsolated)
+    elements.isolatedToggle.textContent = state.hideIsolated ? 'Hide Isolated Pixels' : 'Show Isolated Pixels'
+    if (state.hasUploadedImage) processImage()
+}
+window.addEventListener('DOMContentLoaded', () => {
+    initializePlaceholder()
+    elements.toleranceSlider.value = state.tolerance
+    elements.toleranceValue.textContent = `Tolerance: ${state.tolerance.toFixed(1)}`
+    elements.toleranceSlider.addEventListener('input', updateTolerance)
+    elements.isolatedToggle.addEventListener('click', toggleIsolated)
+    if (elements.portraitColor) {
+        elements.portraitColor.addEventListener('click', toggleBackgroundColor)
+    }
+    rebuildBackgroundSelector(state.backgrounds)
 })
 function setupImageUpload(buttonId, targetId) {
     document.getElementById(buttonId).addEventListener("click", () => {
@@ -77,6 +426,9 @@ setupImageReset("focusReset", "focusIcon")
 setupImageReset("eventImageReset", "eventImage")
 const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus", "eventTitle", "eventQuote"]
 editableDivs.forEach(divId => {
+    window[divId] = document.getElementById(divId).textContent
+})
+editableDivs.forEach(divId => {
     const div = document.getElementById(divId)
     div.addEventListener("click", function () {
         this.setAttribute("contenteditable", "plaintext-only")
@@ -86,7 +438,13 @@ editableDivs.forEach(divId => {
         window.getSelection().removeAllRanges()
         window.getSelection().addRange(range)
     })
-    div.addEventListener("blur", function () { this.removeAttribute("contenteditable") })
+    div.addEventListener("blur", function () {
+        this.removeAttribute("contenteditable")
+        window[divId] = this.textContent
+    })
+    div.addEventListener("input", function () {
+        window[divId] = this.textContent
+    })
 })
 let selectedIdeology = -1
 let selectedSubideology = -1
@@ -124,7 +482,7 @@ function toggleIdeology(ideologyButton) {
     document.getElementById("ideologyDescription").innerHTML = descriptions[ideologyName] || ""
     const portrait = document.getElementById("portrait")
     const currentPortrait = getComputedStyle(portrait).backgroundImage
-    if (currentPortrait.includes("Polzl.png")) { portrait.style.backgroundImage = "url(./Schleicher.png)" }
+    if (currentPortrait.includes("Polzl.png")) { portrait.style.backgroundImage = "url(./Wrangel.png)" }
     updateSubideologies()
 }
 function updateSubideologies() {
@@ -162,8 +520,8 @@ function toggleSubideology(subideologyButton) {
     const portrait = document.getElementById("portrait")
     const currentPortrait = getComputedStyle(portrait).backgroundImage
     const isSpecialSubideology = subideologyName === "Spartakism" || subideologyName === "Leninism"
-    if (currentPortrait.includes("Schleicher.png") && isSpecialSubideology) { portrait.style.backgroundImage = "url(./Polzl.png)" }
-    else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) { portrait.style.backgroundImage = "url(./Schleicher.png)" }
+    if (currentPortrait.includes("Wrangel.png") && isSpecialSubideology) { portrait.style.backgroundImage = "url(./Polzl.png)" }
+    else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) { portrait.style.backgroundImage = "url(./Wrangel.png)" }
 }
 fetch('./descriptions.json')
     .then(response => response.json())
@@ -382,7 +740,7 @@ function randomizePercentages() {
     updateChart()
 }
 function updateInputs() {
-    const inputs = document.querySelectorAll("#popularityAdjuster input")
+    const inputs = document.querySelectorAll("#popularityInputs input")
     inputs.forEach((input, i) => { if (input !== document.activeElement) { input.value = percentages[i] } })
 }
 function updateChart() {
