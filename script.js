@@ -593,6 +593,7 @@ function createInputs() {
             updateControlStates()
         })
         const clearBox = document.createElement("div")
+        clearBox.classList.add("clearBox")
         clearBox.style.outline = `3px solid ${colors[i]}`
         clearBox.dataset.index = i
         clearBox.addEventListener("click", function () {

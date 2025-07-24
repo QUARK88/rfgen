@@ -398,7 +398,7 @@ ideology {
     justify-content: space-between;
     background-color: var(--button);
     padding: 8px;
-    border-radius: 8px;
+    border-radius: 12px;
     color: var(--white);
     text-align: center;
     font-family: futura;
@@ -453,7 +453,7 @@ ideology div {
 #ideologyDescription,
 #subideologyDescription {
     background-color: var(--button);
-    border-radius: 3px;
+    border-radius: 6px;
     font-family: sans-serif;
     font-weight: 600;
     font-size: 14px;
@@ -487,7 +487,7 @@ ideology div {
 
 .buttonGroup button {
     border: none;
-    border-radius: 3px;
+    border-radius: 6px;
     font-family: futura;
     font-weight: 600;
     font-size: 12px;
@@ -504,7 +504,7 @@ ideology div {
 #diploDownload,
 #portraitTools button {
     border: none;
-    border-radius: 3px;
+    border-radius: 6px;
     font-family: futura;
     font-weight: 600;
     font-size: 16px;
@@ -532,7 +532,7 @@ ideology div {
 .percentageControl input {
     padding: 8px;
     border: none;
-    border-radius: 6px;
+    border-radius: 12px 0 0 12px;
     width: 44px;
     border: solid 2px var(--background);
     background-color: var(--white);
@@ -542,7 +542,7 @@ ideology div {
 
 .percentageControl div {
     width: 24px;
-    height: 24px;
+    height: 32px;
     cursor: pointer;
     border: solid 2px var(--background);
     margin-left: 3px;
@@ -557,6 +557,10 @@ ideology div {
 .percentageControl div:active {
     filter: brightness(.9);
     z-index: 1;
+}
+
+.clearBox {
+    border-radius: 0 12px 12px 0;
 }
 
 input:disabled {
@@ -728,7 +732,7 @@ eventTools {
     appearance: none;
     background-color: var(--button);
     height: 32px;
-    border-radius: 3px;
+    border-radius: 6px;
     margin: 0;
     cursor: pointer;
 }
@@ -737,7 +741,7 @@ eventTools {
 #toleranceSlider::-moz-range-thumb {
     width: 32px;
     height: 32px;
-    border-radius: 3px;
+    border-radius: 6px;
     border: none;
     background-color: var(--white);
 }
