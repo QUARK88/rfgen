@@ -393,6 +393,9 @@ function setupImageUpload(buttonId, targetId) {
 setupImageUpload("flagUpload", "flag")
 setupImageUpload("portraitUpload", "portrait")
 setupImageUpload("focusUpload", "focusIcon")
+setupImageUpload("flagTooltip", "flag")
+setupImageUpload("portraitTooltip", "portrait")
+setupImageUpload("focusIcon", "focusIcon")
 setupImageUpload("eventImageUpload", "eventImage")
 function setupImageEdit(buttonId, targetId) {
     const options = [
@@ -446,19 +449,12 @@ editableDivs.forEach(divId => {
         window[divId] = this.textContent
     })
 })
-let selectedIdeology = -1
-let selectedSubideology = -1
-let ideologyButtons = []
-let subideologyButtons = []
-for (let i = 0; i < ideologies.length; i++) {
-    const ideologyElement = document.createElement("ideology")
-    ideologyElement.innerHTML = `<img src="./icon/${ideologies[i]}.png"><div>${ideologies[i]}</div>`
-    ideologyElement.dataset.index = i
-    ideologyElement.addEventListener("click", function () { toggleIdeology(this) })
-    document.getElementById("ideologyPicker").appendChild(ideologyElement)
-    ideologyButtons.push(ideologyElement)
-}
 let descriptions = {}
+fetch('./descriptions.json')
+    .then(response => response.json())
+    .then(data => descriptions = data)
+    .then(() => initIdeologies())
+    .catch(err => console.error('Error loading descriptions:', err))
 function toggleIdeology(ideologyButton) {
     selectedIdeology = parseInt(ideologyButton.dataset.index)
     selectedSubideology = -1
@@ -484,6 +480,20 @@ function toggleIdeology(ideologyButton) {
     const currentPortrait = getComputedStyle(portrait).backgroundImage
     if (currentPortrait.includes("Polzl.png")) { portrait.style.backgroundImage = "url(./Wrangel.png)" }
     updateSubideologies()
+}
+let selectedIdeology = -1
+let selectedSubideology = -1
+let ideologyButtons = []
+let subideologyButtons = []
+function initIdeologies() {
+    for (let i = 0; i < ideologies.length; i++) {
+        const ideologyElement = document.createElement("ideology")
+        ideologyElement.innerHTML = `<img src="./icon/${ideologies[i]}.png"><div>${ideologies[i]}</div>`
+        ideologyElement.dataset.index = i
+        ideologyElement.addEventListener("click", function () { toggleIdeology(this) })
+        document.getElementById("ideologyPicker").appendChild(ideologyElement)
+        ideologyButtons.push(ideologyElement)
+    }
 }
 function updateSubideologies() {
     const container = document.getElementById("subideologyPicker")
@@ -523,10 +533,6 @@ function toggleSubideology(subideologyButton) {
     if (currentPortrait.includes("Wrangel.png") && isSpecialSubideology) { portrait.style.backgroundImage = "url(./Polzl.png)" }
     else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) { portrait.style.backgroundImage = "url(./Wrangel.png)" }
 }
-fetch('./descriptions.json')
-    .then(response => response.json())
-    .then(data => descriptions = data)
-    .catch(err => console.error('Error loading descriptions:', err))
 let percentages = [5, 5, 0, 0, 0, 0, 10, 10, 15, 40, 15]
 let lockedPercentages = new Array(colors.length).fill(false)
 function createInputs() {

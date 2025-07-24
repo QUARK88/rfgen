@@ -251,6 +251,16 @@ ideology:hover,
     background-color: #000;
 }
 
+#flagTooltip {
+    display: block;
+    position: absolute;
+    width: 82px;
+    height: 52px;
+    left: 34px;
+    top: 49px;
+    cursor: pointer;
+}
+
 #icon {
     display: block;
     position: absolute;
@@ -324,6 +334,16 @@ ideology:hover,
     background-image: url(./portraitBackground/General.png);
 }
 
+#portraitTooltip {
+    display: block;
+    position: absolute;
+    width: 115px;
+    height: 155px;
+    left: 16px;
+    top: 161px;
+    cursor: pointer;
+}
+
 #portrait {
     display: block;
     width: 115px;
@@ -357,6 +377,7 @@ ideology:hover,
     background-position: center;
     background-repeat: no-repeat;
     background-image: url(./Focus.png);
+    cursor: pointer;
 }
 
 #focus {
