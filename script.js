@@ -397,6 +397,7 @@ setupImageUpload("flagTooltip", "flag")
 setupImageUpload("portraitTooltip", "portrait")
 setupImageUpload("focusIcon", "focusIcon")
 setupImageUpload("eventImageUpload", "eventImage")
+setupImageUpload("eventImageTooltip", "eventImage")
 function setupImageEdit(buttonId, targetId) {
     const options = [
         ['cover', 'center center'],

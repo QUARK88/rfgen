@@ -630,6 +630,15 @@ input:disabled {
     background-image: url(./eventImage.png);
 }
 
+#eventImageTooltip {
+    position: absolute;
+    width: 558px;
+    height: 290px;
+    top: 32px;
+    left: 24px;
+    cursor: pointer;
+}
+
 #eventTitle {
     display: flex;
     align-items: start;
