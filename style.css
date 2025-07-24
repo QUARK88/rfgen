@@ -119,7 +119,7 @@ ideology:hover,
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    animation: flagFrames 4.7s steps(27) infinite;
+    animation: flagFrames 3s steps(27) infinite;
     background-image: url("./flagAnimation/1.png");
 }
 
