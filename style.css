@@ -597,7 +597,7 @@ input:disabled {
 
 #eventScreenshot {
     width: 607px;
-    height: 534px;
+    height: 618px;
 }
 
 #eventFront {
@@ -609,8 +609,8 @@ input:disabled {
     z-index: 1;
     position: absolute;
     width: 607px;
-    height: 534px;
-    background-image: url(./eventOverlay.png);
+    height: 618px;
+    background-image: url(./eventOverlayButton.png);
 }
 
 #eventBack {
@@ -677,6 +677,24 @@ input:disabled {
     line-height: 24px;
 }
 
+#eventButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    height: 54px;
+    width: 350px;
+    left: 128px;
+    top: 547px;
+    color: var(--white);
+    font-family: futura;
+    text-align: center;
+    font-weight: 600;
+    font-size: 22px;
+    font-style: italic;
+    letter-spacing: -1px;
+}
+
 #country,
 #faction,
 #leader,
@@ -685,7 +703,8 @@ input:disabled {
 #election,
 #focus,
 #eventQuote,
-#eventTitle {
+#eventTitle,
+#eventButton {
     cursor: text;
 }
 

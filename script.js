@@ -428,7 +428,7 @@ setupImageReset("flagReset", "flag")
 setupImageReset("portraitReset", "portrait")
 setupImageReset("focusReset", "focusIcon")
 setupImageReset("eventImageReset", "eventImage")
-const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus", "eventTitle", "eventQuote"]
+const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus", "eventTitle", "eventQuote", "eventButton"]
 editableDivs.forEach(divId => {
     window[divId] = document.getElementById(divId).textContent
 })
@@ -449,6 +449,28 @@ editableDivs.forEach(divId => {
     div.addEventListener("input", function () {
         window[divId] = this.textContent
     })
+})
+let eventTemplateButton = true
+document.getElementById("eventTemplateSwitch").addEventListener("click", function () {
+    const eventScreenshot = document.getElementById("eventScreenshot")
+    const eventOverlay = document.getElementById("eventOverlay")
+    const eventButton = document.getElementById("eventButton")
+    const eventTemplateSwitch = document.getElementById("eventTemplateSwitch")
+    if (eventTemplateButton) {
+        eventScreenshot.style.height = "534px"
+        eventOverlay.style.height = "534px"
+        eventOverlay.style.backgroundImage = "url(./eventOverlay.png)"
+        eventButton.style.display = "none"
+        eventTemplateSwitch.innerText = "Add Event Button"
+        eventTemplateButton = false
+    } else {
+        eventScreenshot.style.height = "618px"
+        eventOverlay.style.height = "618px"
+        eventOverlay.style.backgroundImage = "url(./eventOverlayButton.png)"
+        eventButton.style.display = "flex"
+        eventTemplateSwitch.innerText = "Remove Event Button"
+        eventTemplateButton = true
+    }
 })
 let descriptions = {}
 fetch('./descriptions.json')
