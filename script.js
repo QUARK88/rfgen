@@ -350,12 +350,20 @@ async function sortBackgroundsByRemoval(compositeImg) {
             ctx.drawImage(compositeImg, compX, compY, compositeImg.width * compScale, compositeImg.height * compScale)
             const compositeData = ctx.getImageData(0, 0, canvas.width, canvas.height)
             let removedPixels = 0
+            const diffMap = new Uint8Array(compositeData.data.length / 4)
             for (let i = 0; i < compositeData.data.length; i += 4) {
                 const rDiff = Math.abs(compositeData.data[i] - bgData.data[i])
                 const gDiff = Math.abs(compositeData.data[i + 1] - bgData.data[i + 1])
                 const bDiff = Math.abs(compositeData.data[i + 2] - bgData.data[i + 2])
                 if (rDiff < SORTING_TOLERANCE && gDiff < SORTING_TOLERANCE && bDiff < SORTING_TOLERANCE) {
+                    diffMap[i / 4] = 1
                     removedPixels++
+                }
+            }
+            if (state.hideIsolated) {
+                const edgeMap = findEdgeConnectedPixels(diffMap, canvas.width, canvas.height)
+                for (let i = 0; i < compositeData.data.length; i += 4) {
+                    if (diffMap[i / 4] && !edgeMap[i / 4]) removedPixels--
                 }
             }
             backgroundScores.push({ ideology, score: removedPixels })
@@ -435,7 +443,15 @@ function toggleIsolated() {
     state.hideIsolated = !state.hideIsolated
     elements.isolatedToggle.classList.toggle("active", state.hideIsolated)
     elements.isolatedToggle.textContent = state.hideIsolated ? "Hide Isolated Pixels" : "Show Isolated Pixels"
-    if (state.hasUploadedImage) processImage()
+    if (state.hasUploadedImage) {
+        const img = new Image()
+        img.onload = async () => {
+            const sortedBackgrounds = await sortBackgroundsByRemoval(img)
+            rebuildBackgroundSelector(sortedBackgrounds)
+            await processImage()
+        }
+        img.src = state.uploadedImage
+    }
 }
 window.addEventListener("DOMContentLoaded", () => {
     initializePlaceholder()
