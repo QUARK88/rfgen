@@ -491,19 +491,19 @@ setupImageUpload("portraitTooltip", "portrait")
 setupImageUpload("focusIcon", "focusIcon")
 setupImageUpload("eventImageUpload", "eventImage")
 setupImageUpload("eventImageTooltip", "eventImage")
+const options = [
+    ["cover", "center center"],
+    ["cover", "bottom center"],
+    ["cover", "top center"],
+    ["cover", "left center"],
+    ["cover", "right center"],
+    ["contain", "center center"],
+    ["contain", "bottom center"],
+    ["contain", "top center"],
+    ["contain", "left center"],
+    ["contain", "right center"]
+]
 function setupImageEdit(buttonId, targetId) {
-    const options = [
-        ["cover", "center center"],
-        ["cover", "bottom center"],
-        ["cover", "top center"],
-        ["cover", "left center"],
-        ["cover", "right center"],
-        ["contain", "center center"],
-        ["contain", "bottom center"],
-        ["contain", "top center"],
-        ["contain", "left center"],
-        ["contain", "right center"]
-    ]
     let currentIndex = 0
     document.getElementById(buttonId).addEventListener("click", () => {
         const target = document.getElementById(targetId)
@@ -516,6 +516,25 @@ setupImageEdit("flagEdit", "flag")
 setupImageEdit("portraitEdit", "portrait")
 setupImageEdit("focusEdit", "focusIcon")
 setupImageEdit("eventImageEdit", "eventImage")
+document.addEventListener("DOMContentLoaded", () => {
+    let currentIndex = 0
+    const zoneToTargetMap = {
+        flagTooltip: "flag",
+        portraitTooltip: "portrait",
+        focusIcon: "focusIcon",
+        eventImageTooltip: "eventImage"
+    }
+    Object.keys(zoneToTargetMap).forEach(zoneId => {
+        const element = document.getElementById(zoneId)
+        element.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+            const target = document.getElementById(zoneToTargetMap[zoneId])
+            currentIndex = (currentIndex + 1) % options.length
+            target.style.backgroundSize = options[currentIndex][0]
+            target.style.backgroundPosition = options[currentIndex][1]
+        })
+    })
+})
 function setupImageReset(buttonId, targetId) { document.getElementById(buttonId).addEventListener("click", () => { document.getElementById(targetId).style.backgroundImage = "none" }) }
 setupImageReset("flagReset", "flag")
 setupImageReset("portraitReset", "portrait")
