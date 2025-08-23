@@ -45,7 +45,7 @@
 </head>
 
 <body>
-    <nav>
+    <nav class="selectproof">
         <a id="logo" href="https://youtu.be/nBZJUvqg2os" target="_blank" title="🇪🇺">
             <img src="./icon.png">
             <div>Red Flood Generator by Quark</div>
@@ -113,13 +113,13 @@
                 </div>
             </div>
             <div id="diploIdeologyMenu">
-                <div id="ideologyPicker" class="picker">
+                <div id="ideologyPicker" class="picker selectproof">
                     <ideology class="title">
                         <div>Pick ruling ideology</div>
                     </ideology>
                 </div>
                 <div id="ideologyDescription">Description of the selected ideology</div>
-                <div id="subideologyPicker" class="picker">
+                <div id="subideologyPicker" class="picker selectproof">
                     <ideology class="title">
                         <div>Pick ruling subideology</div>
                     </ideology>
@@ -142,7 +142,7 @@
                     <div id="eventImage"></div>
                 </div>
             </div>
-            <div class="buttonGroup" id="eventButtons">
+            <div class="buttonGroup selectproof" id="eventButtons">
                 <button id="eventImageUpload">Upload Event Image</button>
                 <button id="eventImageEdit">Edit Event Image</button>
                 <button id="eventImageReset">Remove Event Image</button>
@@ -157,7 +157,7 @@
                 <div id="portraitScreenshot" onclick="document.getElementById('portraitUpload2').click()" style="cursor: pointer;" title="Click to upload portrait"></div>
             </div>
             <div id="portraitTools">
-                <div id="toleranceValue">Tolerance: 20.0</div>
+                <div id="toleranceValue" class="selectproof">Tolerance: 20.0</div>
                 <input type="range" id="toleranceSlider" min="0" max="50" step="0.1">
                 <div id="portraitButtons">
                     <button id="isolatedToggle" class="active">Hide Isolated Pixels</button>
@@ -170,7 +170,7 @@
             <div id="backgroundTools">
                 <div id="backgroundTooltip">Select background to remove</div>
                 <div class="backgroundNotice">The backgrounds get sorted automatically by likeliness, and the top one gets picked, but sometimes it might be wrong. Try several of them.</div>
-                <div id="backgroundSelector"></div>
+                <div id="backgroundSelector" class="selectproof"></div>
                 <div class="backgroundNotice">It's not perfect, but it's something.</div>
             </div>
         </section>

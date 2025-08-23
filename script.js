@@ -925,3 +925,7 @@ function randomizeSubideology() {
 }
 createInputs()
 updateChart()
+function makeImagesNonDraggable() { document.querySelectorAll('img').forEach(img => { img.setAttribute('draggable', 'false') }) }
+document.addEventListener('DOMContentLoaded', makeImagesNonDraggable)
+const observer = new MutationObserver((mutations) => { mutations.forEach((mutation) => { if (mutation.addedNodes.length) { makeImagesNonDraggable() } }) })
+observer.observe(document.body, { childList: true, subtree: true })

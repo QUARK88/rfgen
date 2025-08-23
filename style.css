@@ -17,6 +17,14 @@
     text-rendering: optimizeLegibility;
 }
 
+.selectproof,
+.selectproof * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 body {
     background-color: var(--background);
     margin: 0;
