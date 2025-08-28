@@ -122,9 +122,9 @@ document.getElementById("diploDownload").addEventListener("click", async () => {
         const hasCountry = country && country !== "Click to edit country name"
         if (hasLeader && hasCountry) {
             link.download = `Red Flood Diplo ${leader} ${country}.png`
-        } else if (hasValidLeader) {
+        } else if (hasLeader) {
             link.download = `Red Flood Diplo ${leader}.png`
-        } else if (hasValidCountry) {
+        } else if (hasCountry) {
             link.download = `Red Flood Diplo ${country}.png`
         } else {
             link.download = "Red Flood Diplo.png"
