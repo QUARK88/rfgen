@@ -1003,6 +1003,7 @@ input:disabled {
 
     #diploSection,
     #eventSection,
+    #newsSection,
     #portraitSection {
         display: flex;
         flex-direction: column;
@@ -1018,11 +1019,13 @@ input:disabled {
         margin: 8px 0;
     }
 
-    #eventSection {
+    #eventSection,
+    #newsSection {
         align-items: center;
     }
 
-    #eventButtons {
+    #eventButtons,
+    #newsButtons {
         width: 100%;
     }
 }
