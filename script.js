@@ -3,7 +3,8 @@ import * as htmlToImage from "https://cdn.jsdelivr.net/npm/html-to-image@1.11.13
 const page1 = document.getElementById("page1")
 const page2 = document.getElementById("page2")
 const page3 = document.getElementById("page3")
-const pages = [page1, page2, page3]
+const page4 = document.getElementById("page4")
+const pages = [page1, page2, page3, page4]
 const ideologies = ["Accelerationism", "Anarchism", "Vanguard Socialism", "Popular Socialism", "Revisionist Socialism", "Progressivism", "Liberalism", "Conservatism", "Polyarchy", "Despotism", "Reactionism"]
 const accelerationism = ["Fiumanism", "Futurism", "National Rejuvenatism", "Neo-Folkism", "Surrealism", "Technocracy", "Vperedism"]
 const anarchism = ["Individualist Anarchism", "Mystical Anarchism", "National Anarchism", "Naturist Anarchism", "Social Anarchism", "Statelessness", "Stratocratic Anarchism"]
@@ -28,11 +29,13 @@ show(page1)
 document.getElementById("page1Button").addEventListener("click", () => { show(page1) })
 document.getElementById("page2Button").addEventListener("click", () => { show(page2) })
 document.getElementById("page3Button").addEventListener("click", () => { show(page3) })
+document.getElementById("page4Button").addEventListener("click", () => { show(page4) })
 const dropZones = {
     "flagTooltip": "flag",
     "portraitTooltip": "portrait",
     "focusIcon": "focusIcon",
     "eventImageTooltip": "eventImage",
+    "newsImageTooltip": "newsImage",
     "portraitScreenshot": "portraitScreenshot"
 }
 Object.keys(dropZones).forEach(dropZoneId => {
@@ -178,6 +181,46 @@ document.getElementById("eventDownload").addEventListener("click", async () => {
         alert("Screenshot downloading is not supported on this browser. Chrome-based browsers seem to work just fine, so you might wanna try there. Not my fault the modules suck, i'm a Firefox user myself and this pisses me off.")
     } finally {
         const clones = document.querySelectorAll('#eventScreenshot[style*="fixed"]')
+        clones.forEach(clone => document.body.removeChild(clone))
+    }
+})
+document.getElementById("newsDownload").addEventListener("click", async () => {
+    try {
+        const element = document.getElementById("newsScreenshot")
+        if (!element) throw new Error("Element not found")
+        const clone = element.cloneNode(true)
+        clone.style.position = "fixed"
+        clone.style.top = "0"
+        clone.style.left = "0"
+        clone.style.zIndex = "999999"
+        clone.style.visibility = "hidden"
+        clone.style.background = "transparent"
+        document.body.appendChild(clone)
+        await new Promise(resolve => setTimeout(resolve, 50))
+        clone.style.visibility = "visible"
+        const options = {
+            backgroundColor: null,
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+            cacheBust: true
+        }
+        const dataURL = await htmlToImage.toPng(clone, options)
+        const link = document.createElement("a")
+        link.href = dataURL
+        if (newsTitle && newsTitle !== "Click to edit news title") {
+            link.download = `Red Flood News ${newsTitle}.png`
+        }
+        else {
+            link.download = `Red Flood News.png`
+        }
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    } catch (error) {
+        console.error("Screenshot failed:", error)
+        alert("Screenshot downloading is not supported on this browser. Chrome-based browsers seem to work just fine, so you might wanna try there. Not my fault the modules suck, i'm a Firefox user myself and this pisses me off.")
+    } finally {
+        const clones = document.querySelectorAll('#newsScreenshot[style*="fixed"]')
         clones.forEach(clone => document.body.removeChild(clone))
     }
 })
@@ -491,6 +534,8 @@ setupImageUpload("portraitTooltip", "portrait")
 setupImageUpload("focusIcon", "focusIcon")
 setupImageUpload("eventImageUpload", "eventImage")
 setupImageUpload("eventImageTooltip", "eventImage")
+setupImageUpload("newsImageUpload", "newsImage")
+setupImageUpload("newsImageTooltip", "newsImage")
 const options = [
     ["cover", "center center"],
     ["cover", "bottom center"],
@@ -516,13 +561,15 @@ setupImageEdit("flagEdit", "flag")
 setupImageEdit("portraitEdit", "portrait")
 setupImageEdit("focusEdit", "focusIcon")
 setupImageEdit("eventImageEdit", "eventImage")
+setupImageEdit("newsImageEdit", "newsImage")
 document.addEventListener("DOMContentLoaded", () => {
     let currentIndex = 0
     const zoneToTargetMap = {
         flagTooltip: "flag",
         portraitTooltip: "portrait",
         focusIcon: "focusIcon",
-        eventImageTooltip: "eventImage"
+        eventImageTooltip: "eventImage",
+        newsImageTooltip: "newsImage"
     }
     Object.keys(zoneToTargetMap).forEach(zoneId => {
         const element = document.getElementById(zoneId)
@@ -540,7 +587,8 @@ setupImageReset("flagReset", "flag")
 setupImageReset("portraitReset", "portrait")
 setupImageReset("focusReset", "focusIcon")
 setupImageReset("eventImageReset", "eventImage")
-const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus", "eventTitle", "eventQuote", "eventButton"]
+setupImageReset("newsImageReset", "newsImage")
+const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus", "eventTitle", "eventQuote", "eventButton", "newsTitle", "newsText", "newsButton"]
 editableDivs.forEach(divId => {
     window[divId] = document.getElementById(divId).textContent
 })

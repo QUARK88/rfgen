@@ -3,11 +3,17 @@
     --white: #f0f0f0;
     --button: #404040;
     --border: #303030;
+    --black: #000000;
 }
 
 @font-face {
     font-family: futura;
     src: url(./futura.ttf);
+}
+
+@font-face {
+    font-family: typeMachine;
+    src: url(./typeMachine.ttf);
 }
 
 * {
@@ -42,7 +48,7 @@ nav>a {
     display: flex;
     flex: 1 1 0;
     padding: 8px;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
     align-items: center;
     background-color: var(--button);
@@ -597,7 +603,8 @@ input:disabled {
     color: var(--white);
 }
 
-#eventSection {
+#eventSection,
+#newsSection {
     display: flex;
     margin: 16px 16px 0 16px;
     gap: 16px;
@@ -710,34 +717,137 @@ input:disabled {
 #party,
 #election,
 #focus,
-#eventQuote,
 #eventTitle,
-#eventButton {
+#eventQuote,
+#eventButton,
+#newsTitle,
+#newsText {
     cursor: text;
 }
 
-eventSpacing {
-    display: block;
-    height: 534px;
-}
-
-eventTools {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-    padding-top: 10px;
-    padding-right: 16px;
-}
-
-#eventButtons {
+#eventButtons,
+#newsButtons {
     flex-direction: column;
 }
 
-#eventButtons button {
+#eventButtons button,
+#newsButtons button {
     height: 80px;
     font-size: 24px;
     flex-grow: 1;
+}
+
+#newsScreenshot {
+    width: 527px;
+    height: 799px;
+}
+
+#newsFront {
+    position: absolute;
+    z-index: 2;
+}
+
+#newsOverlay {
+    z-index: 0;
+    position: absolute;
+    width: 527px;
+    height: 799px;
+    background-image: url(./newsBackground.png);
+}
+
+#newsBack {
+    z-index: 0;
+    position: absolute;
+}
+
+#newsImage {
+    z-index: 1;
+    position: absolute;
+    width: 399px;
+    height: 155px;
+    top: 90px;
+    left: 57px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(./newsImage.png);
+    background-color: var(--black);
+}
+
+#newsImageTooltip {
+    z-index: 2;
+    position: absolute;
+    width: 399px;
+    height: 155px;
+    top: 90px;
+    left: 57px;
+    cursor: pointer;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(./newsOverlay.png);
+}
+
+#newsFlex {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+    width: 451px;
+    height: 360px;
+    left: 31px;
+    top: 260px;
+    gap: 12px;
+}
+
+#newsTitle {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    min-height: 28px;
+    width: 451px;
+    color: var(--black);
+    font-family: typeMachine;
+    text-align: center;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: -.5px;
+}
+
+#newsText {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-grow: 1;
+    min-height: 28px;
+    height: 30px;
+    width: 451px;
+    color: var(--black);
+    font-family: typeMachine;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13.5px;
+    letter-spacing: -.5px;
+    line-height: 18px;
+}
+
+#newsButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    height: 76px;
+    width: 323px;
+    left: 102px;
+    top: 652px;
+    color: var(--white);
+    font-family: futura;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14.5px;
+    letter-spacing: -.5px;
+    line-height: 24px;
 }
 
 #portraitSection {

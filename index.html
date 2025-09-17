@@ -52,7 +52,8 @@
         </a>
         <div class="navButton" id="page1Button">Diplomatic Screen Generator</div>
         <div class="navButton" id="page2Button">Super Event Generator</div>
-        <div class="navButton" id="page3Button">Portrait Background Remover</div>
+        <div class="navButton" id="page3Button">News Generator</div>
+        <div class="navButton" id="page4Button">Portrait Background Remover</div>
     </nav>
     <div id="page1">
         <section id="diploSection">
@@ -152,6 +153,30 @@
         </section>
     </div>
     <div id="page3">
+        <section id="newsSection">
+            <div id="newsScreenshot">
+                <div id="newsFront">
+                    <div id="newsImageTooltip" title="Click to upload news image"></div>
+                    <div id="newsFlex">
+                        <div id="newsTitle">Click to edit news title</div>
+                        <div id="newsText">Click to edit news text</div>
+                    </div>
+                    <div id="newsButton">Click to edit news button</div>
+                </div>
+                <div id="newsOverlay"></div>
+                <div id="newsBack">
+                    <div id="newsImage"></div>
+                </div>
+            </div>
+            <div class="buttonGroup selectproof" id="newsButtons">
+                <button id="newsImageUpload">Upload News Image</button>
+                <button id="newsImageEdit">Edit News Image</button>
+                <button id="newsImageReset">Remove News Image</button>
+                <button id="newsDownload">Download Image</button>
+            </div>
+        </section>
+    </div>
+    <div id="page4">
         <section id="portraitSection">
             <div id="portraitViewer">
                 <div id="portraitScreenshot" onclick="document.getElementById('portraitUpload2').click()" style="cursor: pointer;" title="Click to upload portrait"></div>
