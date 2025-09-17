@@ -1014,6 +1014,10 @@ input:disabled {
         padding: 0 16px;
     }
 
+    .picker {
+        justify-content: center;
+    }
+
     #popularityInputs {
         gap: 16px;
         margin: 8px 0;
