@@ -263,7 +263,7 @@ const state = {
     uploadedImage: null,
     selectedBackground: null,
     tolerance: 20,
-    hideIsolated: true,
+    hideIsolated: 1,
     backgrounds: [...ideologies, "General"],
     hasUploadedImage: false,
     isProcessing: false,
@@ -352,10 +352,19 @@ async function processImage() {
             const bDiff = Math.abs(compositeData.data[i + 2] - bgData.data[i + 2])
             diffMap[i / 4] = (rDiff < state.tolerance && gDiff < state.tolerance && bDiff < state.tolerance) ? 1 : 0
         }
-        if (state.hideIsolated) {
+        if (state.hideIsolated === 1) {
             const edgeMap = findEdgeConnectedPixels(diffMap, canvas.width, canvas.height)
             for (let i = 0; i < compositeData.data.length; i += 4) {
                 if (diffMap[i / 4] && !edgeMap[i / 4]) diffMap[i / 4] = 0
+            }
+        } else if (state.hideIsolated === 2) {
+            const edgeMapBackground = findEdgeConnectedPixels(diffMap, canvas.width, canvas.height)
+            const invMap = diffMap.map(v => v ? 0 : 1)
+            const edgeMapForeground = findEdgeConnectedPixels(invMap, canvas.width, canvas.height)
+            for (let i = 0; i < compositeData.data.length; i += 4) {
+                const idx = i / 4
+                if (diffMap[idx] && !edgeMapBackground[idx]) compositeData.data[i + 3] = 0
+                if (!diffMap[idx] && !edgeMapForeground[idx]) compositeData.data[i + 3] = 0
             }
         }
         for (let i = 0; i < compositeData.data.length; i += 4) {
@@ -401,12 +410,6 @@ async function sortBackgroundsByRemoval(compositeImg) {
                 if (rDiff < SORTING_TOLERANCE && gDiff < SORTING_TOLERANCE && bDiff < SORTING_TOLERANCE) {
                     diffMap[i / 4] = 1
                     removedPixels++
-                }
-            }
-            if (state.hideIsolated) {
-                const edgeMap = findEdgeConnectedPixels(diffMap, canvas.width, canvas.height)
-                for (let i = 0; i < compositeData.data.length; i += 4) {
-                    if (diffMap[i / 4] && !edgeMap[i / 4]) removedPixels--
                 }
             }
             backgroundScores.push({ ideology, score: removedPixels })
@@ -483,9 +486,17 @@ function updateTolerance() {
     }
 }
 function toggleIsolated() {
-    state.hideIsolated = !state.hideIsolated
-    elements.isolatedToggle.classList.toggle("active", state.hideIsolated)
-    elements.isolatedToggle.textContent = state.hideIsolated ? "Hide Isolated Pixels" : "Show Isolated Pixels"
+    if (state.hideIsolated === 0) {
+        state.hideIsolated = 1
+    } else if (state.hideIsolated === 1) {
+        state.hideIsolated = 2
+    } else if (state.hideIsolated === 2) {
+        state.hideIsolated = 0
+    }
+    elements.isolatedToggle.textContent =
+        state.hideIsolated === 0 ? "Filter: None" :
+            state.hideIsolated === 1 ? "Filter: Removing Holes" :
+                "Filter: Removing Holes And Blobs";
     if (state.hasUploadedImage) {
         const img = new Image()
         img.onload = async () => {
