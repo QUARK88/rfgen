@@ -32,6 +32,7 @@ document.getElementById("page3Button").addEventListener("click", () => { show(pa
 document.getElementById("page4Button").addEventListener("click", () => { show(page4) })
 const dropZones = {
     "flagTooltip": "flag",
+    "icon": "icon",
     "portraitTooltip": "portrait",
     "focusIcon": "focusIcon",
     "eventImageTooltip": "eventImage",
@@ -538,9 +539,11 @@ function setupImageUpload(buttonId, targetId) {
     })
 }
 setupImageUpload("flagUpload", "flag")
+setupImageUpload("iconUpload", "icon")
 setupImageUpload("portraitUpload", "portrait")
 setupImageUpload("focusUpload", "focusIcon")
 setupImageUpload("flagTooltip", "flag")
+setupImageUpload("icon", "icon")
 setupImageUpload("portraitTooltip", "portrait")
 setupImageUpload("focusIcon", "focusIcon")
 setupImageUpload("eventImageUpload", "eventImage")
@@ -569,6 +572,7 @@ function setupImageEdit(buttonId, targetId) {
     })
 }
 setupImageEdit("flagEdit", "flag")
+setupImageEdit("iconEdit", "icon")
 setupImageEdit("portraitEdit", "portrait")
 setupImageEdit("focusEdit", "focusIcon")
 setupImageEdit("eventImageEdit", "eventImage")
@@ -577,6 +581,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentIndex = 0
     const zoneToTargetMap = {
         flagTooltip: "flag",
+        icon: "icon",
         portraitTooltip: "portrait",
         focusIcon: "focusIcon",
         eventImageTooltip: "eventImage",
@@ -595,11 +600,12 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 function setupImageReset(buttonId, targetId) { document.getElementById(buttonId).addEventListener("click", () => { document.getElementById(targetId).style.backgroundImage = "none" }) }
 setupImageReset("flagReset", "flag")
+setupImageReset("iconReset", "icon")
 setupImageReset("portraitReset", "portrait")
 setupImageReset("focusReset", "focusIcon")
 setupImageReset("eventImageReset", "eventImage")
 setupImageReset("newsImageReset", "newsImage")
-const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "election", "focus", "eventTitle", "eventQuote", "eventButton", "newsTitle", "newsText", "newsButton"]
+const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "ideology", "subideology", "election", "focus", "eventTitle", "eventQuote", "eventButton", "newsTitle", "newsText", "newsButton"]
 editableDivs.forEach(divId => {
     window[divId] = document.getElementById(divId).textContent
 })

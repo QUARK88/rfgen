@@ -57,10 +57,10 @@
     </nav>
     <div id="page1">
         <section id="diploSection">
-            <div id="diploScreenshot">
+            <div id="diploScreenshot" class="selectproof">
                 <div id="diploFront">
                     <div id="flagTooltip" title="Click to upload flag"></div>
-                    <div id="icon"></div>
+                    <div id="icon" title="Click to upload ideology icon"></div>
                     <div id="topNames">
                         <div id="country">Click to edit country name</div>
                         <div id="faction">Click to edit faction name</div>
@@ -71,8 +71,8 @@
                     <div id="portraitTooltip" title="Click to upload portrait"></div>
                     <div id="bottomNames">
                         <div id="party">Click to edit party name</div>
-                        <div id="ideology">Ideology Name</div>
-                        <div id="subideology">Subideology Name</div>
+                        <div id="ideology">Click to edit ideology name</div>
+                        <div id="subideology">Click to edit subideology name</div>
                         <div id="election">Click to edit election type</div>
                     </div>
                     <div id="focusIcon" title="Click to upload focus icon"></div>
@@ -91,27 +91,32 @@
             <div id="diploTools">
                 <div class="buttonGroup" id="popularityTools"></div>
                 <div id="popularityInputs"></div>
-                <button id="diploDownload">Download Image</button>
                 <div class="buttonGroup">
                     <button id="flagUpload">Upload Flag</button>
-                    <button id="portraitUpload">Upload Portrait</button>
-                    <button id="focusUpload">Upload Focus Icon</button>
-                </div>
-                <div class="buttonGroup">
                     <button id="flagEdit">Edit Flag</button>
-                    <button id="portraitEdit">Edit Portrait</button>
-                    <button id="focusEdit">Edit Focus Icon</button>
+                    <button id="flagReset">Remove Flag</button>
                 </div>
                 <div class="buttonGroup">
-                    <button id="flagReset">Remove Flag</button>
+                    <button id="portraitUpload">Upload Portrait</button>
+                    <button id="portraitEdit">Edit Portrait</button>
                     <button id="portraitReset">Remove Portrait</button>
+                </div>
+                <div class="buttonGroup">
+                    <button id="focusUpload">Upload Focus Icon</button>
+                    <button id="focusEdit">Edit Focus Icon</button>
                     <button id="focusReset">Remove Focus Icon</button>
                 </div>
                 <div class="buttonGroup">
-                    <button id="randomizeIdeology">Randomize Ideology</button>
+                    <button id="iconUpload">Upload Ideology Icon</button>
+                    <button id="iconEdit">Edit Ideology Icon</button>
+                    <button id="iconReset">Remove Ideology Icon</button>
+                </div>
+                <div class="buttonGroup">
                     <button id="randomizeStability">Randomize Stability</button>
                     <button id="randomizeWarSupport">Randomize War Support</button>
+                    <button id="randomizeIdeology">Randomize Ideology</button>
                 </div>
+                <button id="diploDownload">Download Image</button>
             </div>
             <div id="diploIdeologyMenu">
                 <div id="ideologyPicker" class="picker selectproof">
@@ -131,7 +136,7 @@
     </div>
     <div id="page2">
         <section id="eventSection">
-            <div id="eventScreenshot">
+            <div id="eventScreenshot" class="selectproof">
                 <div id="eventFront">
                     <div id="eventImageTooltip" title="Click to upload event image"></div>
                     <div id="eventQuote">Click to edit event quote<br>- Quote speaker suggested</div>
@@ -154,7 +159,7 @@
     </div>
     <div id="page3">
         <section id="newsSection">
-            <div id="newsScreenshot">
+            <div id="newsScreenshot" class="selectproof">
                 <div id="newsFront">
                     <div id="newsImageTooltip" title="Click to upload news image"></div>
                     <div id="newsFlex">
@@ -178,21 +183,21 @@
     </div>
     <div id="page4">
         <section id="portraitSection">
-            <div id="portraitViewer">
+            <div id="portraitViewer" class="selectproof">
                 <div id="portraitScreenshot" onclick="document.getElementById('portraitUpload2').click()" style="cursor: pointer;" title="Click to upload portrait"></div>
             </div>
-            <div id="portraitTools">
+            <div id="portraitTools" class="selectproof">
                 <div id="toleranceValue" class="selectproof">Tolerance: 20.0</div>
                 <input type="range" id="toleranceSlider" min="0" max="50" step="0.1">
                 <div id="portraitButtons">
-                    <button id="isolatedToggle" class="active">Hide Isolated Pixels</button>
+                    <button id="isolatedToggle" class="active">Filter: Removing Holes</button>
                     <button id="portraitColor">Turn Background Black</button>
                     <input type="file" id="portraitUpload2" accept="image/*" style="display: none;">
                     <button onclick="document.getElementById('portraitUpload2').click()">Upload Portrait</button>
                     <button id="portraitDownload">Download Image</button>
                 </div>
             </div>
-            <div id="backgroundTools">
+            <div id="backgroundTools" class="selectproof">
                 <div id="backgroundTooltip">Select background to remove</div>
                 <div class="backgroundNotice">The backgrounds get sorted automatically by likeliness, and the top one gets picked, but sometimes it might be wrong. Try several of them.</div>
                 <div id="backgroundSelector" class="selectproof"></div>

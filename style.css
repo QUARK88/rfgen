@@ -282,7 +282,11 @@ ideology:hover,
     height: 66px;
     left: 146px;
     top: 42px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     background-image: url(./icon/Despotism/Absolute\ Monarchy.png);
+    cursor: pointer;
 }
 
 #topNames {
@@ -521,6 +525,9 @@ ideology div {
 }
 
 .buttonGroup button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: none;
     border-radius: 6px;
     font-family: futura;
@@ -715,6 +722,8 @@ input:disabled {
 #leader,
 .unity,
 #party,
+#ideology,
+#subideology,
 #election,
 #focus,
 #eventTitle,
