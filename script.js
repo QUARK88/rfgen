@@ -606,25 +606,99 @@ setupImageReset("focusReset", "focusIcon")
 setupImageReset("eventImageReset", "eventImage")
 setupImageReset("newsImageReset", "newsImage")
 const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "ideology", "subideology", "election", "focus", "eventTitle", "eventQuote", "eventButton", "newsTitle", "newsText", "newsButton"]
+function escapeHtml(s) {
+    return s
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+}
 editableDivs.forEach(divId => {
-    window[divId] = document.getElementById(divId).textContent
-})
-editableDivs.forEach(divId => {
-    const div = document.getElementById(divId)
-    div.addEventListener("click", function () {
-        this.setAttribute("contenteditable", "plaintext-only")
+    const el = document.getElementById(divId)
+    if (!el) return
+    window[divId] = el.textContent
+    el.style.whiteSpace = "pre-wrap"
+    el.style.wordBreak = "break-word"
+    el.addEventListener("click", function () {
+        this.setAttribute("contenteditable", "true")
         this.focus()
         const range = document.createRange()
         range.selectNodeContents(this)
-        window.getSelection().removeAllRanges()
-        window.getSelection().addRange(range)
+        const sel = window.getSelection()
+        sel.removeAllRanges()
+        sel.addRange(range)
     })
-    div.addEventListener("blur", function () {
+    el.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault()
+            const sel = window.getSelection()
+            if (!sel.rangeCount) return
+            const range = sel.getRangeAt(0)
+            range.deleteContents()
+            const br = document.createElement("br")
+            const zw = document.createTextNode("\u200B")
+            const frag = document.createDocumentFragment()
+            frag.appendChild(br)
+            frag.appendChild(zw)
+            range.insertNode(frag)
+            const newRange = document.createRange()
+            newRange.setStartAfter(zw)
+            newRange.collapse(true)
+            sel.removeAllRanges()
+            sel.addRange(newRange)
+        }
+    })
+    el.addEventListener("paste", function (e) {
+        e.preventDefault()
+        const text = (e.clipboardData || window.clipboardData).getData("text") || ""
+        const normalized = text.replace(/\r\n/g, "\n")
+        const lines = normalized.split("\n")
+        const frag = document.createDocumentFragment()
+        for (let i = 0; i < lines.length; i++) {
+            frag.appendChild(document.createTextNode(lines[i]))
+            if (i < lines.length - 1) frag.appendChild(document.createElement("br"))
+        }
+        const sel = window.getSelection()
+        if (!sel.rangeCount) {
+            this.appendChild(frag)
+            const last = this.lastChild
+            const nr = document.createRange()
+            if (last && last.nodeType === 3) nr.setStart(last, last.length)
+            else if (last) nr.setStartAfter(last)
+            nr.collapse(true)
+            sel.removeAllRanges()
+            sel.addRange(nr)
+        } else {
+            const range = sel.getRangeAt(0)
+            range.deleteContents()
+            const last = frag.lastChild
+            range.insertNode(frag)
+            const nr = document.createRange()
+            if (last && last.nodeType === 3) nr.setStart(last, last.length)
+            else if (last) nr.setStartAfter(last)
+            nr.collapse(true)
+            sel.removeAllRanges()
+            sel.addRange(nr)
+        }
+    })
+    el.addEventListener("drop", e => e.preventDefault())
+    el.addEventListener("input", function () {
+        window[divId] = this.innerText.replace(/\u200B/g, "")
+    })
+    el.addEventListener("blur", function () {
         this.removeAttribute("contenteditable")
-        window[divId] = this.textContent
-    })
-    div.addEventListener("input", function () {
-        window[divId] = this.textContent
+        let html = this.innerHTML
+            .replace(/\u200B/g, "")
+            .replace(/<div>/gi, "")
+            .replace(/<\/div>/gi, "<br>")
+            .replace(/<p>/gi, "")
+            .replace(/<\/p>/gi, "<br>")
+            .replace(/<br\s*\/?>/gi, "<br>")
+            .replace(/<(?!br\s*\/?)[^>]+>/gi, "")
+        html = html.replace(/(<br>\s*){2,}/g, match => {
+            return match.replace(/<br><br>/g, "<br> <br>")
+        })
+        this.innerHTML = html
+        window[divId] = html.replace(/<br\s*\/?>/gi, "\n")
     })
 })
 let eventTemplateButton = true

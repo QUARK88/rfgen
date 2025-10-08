@@ -663,14 +663,13 @@ input:disabled {
 
 #eventTitle {
     display: flex;
-    align-items: start;
+    align-items: center;
     justify-content: center;
     position: absolute;
-    height: 30px;
+    height: 38px;
     width: 222px;
     left: 190px;
     top: 325px;
-    padding-top: 8px;
     color: var(--white);
     font-family: futura;
     text-align: center;
@@ -827,7 +826,7 @@ input:disabled {
 #newsText {
     display: flex;
     align-items: start;
-    justify-content: center;
+    justify-content: start;
     flex-grow: 1;
     min-height: 28px;
     height: 30px;
@@ -837,8 +836,8 @@ input:disabled {
     text-align: left;
     font-weight: 500;
     font-size: 13.5px;
-    letter-spacing: -.5px;
-    line-height: 18px;
+    letter-spacing: -.4px;
+    line-height: 16px;
 }
 
 #newsButton {
