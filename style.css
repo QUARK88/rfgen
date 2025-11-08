@@ -845,10 +845,11 @@ input:disabled {
     align-items: center;
     justify-content: center;
     position: absolute;
-    height: 76px;
-    width: 323px;
-    left: 102px;
-    top: 652px;
+    height: 50px;
+    width: 292px;
+    left: 104px;
+    top: 653px;
+    padding: 12px 13px;
     color: var(--white);
     font-family: futura;
     text-align: center;
