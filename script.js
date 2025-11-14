@@ -497,7 +497,7 @@ function toggleIsolated() {
     elements.isolatedToggle.textContent =
         state.hideIsolated === 0 ? "Filter: None" :
             state.hideIsolated === 1 ? "Filter: Removing Holes" :
-                "Filter: Removing Holes And Blobs";
+                "Filter: Removing Holes And Blobs"
     if (state.hasUploadedImage) {
         const img = new Image()
         img.onload = async () => {
@@ -590,7 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Object.keys(zoneToTargetMap).forEach(zoneId => {
         const element = document.getElementById(zoneId)
         element.addEventListener("contextmenu", (event) => {
-            event.preventDefault();
+            event.preventDefault()
             const target = document.getElementById(zoneToTargetMap[zoneId])
             currentIndex = (currentIndex + 1) % options.length
             target.style.backgroundSize = options[currentIndex][0]
@@ -606,12 +606,6 @@ setupImageReset("focusReset", "focusIcon")
 setupImageReset("eventImageReset", "eventImage")
 setupImageReset("newsImageReset", "newsImage")
 const editableDivs = ["country", "faction", "leader", "stability", "warSupport", "party", "ideology", "subideology", "election", "focus", "eventTitle", "eventQuote", "eventButton", "newsTitle", "newsText", "newsButton"]
-function escapeHtml(s) {
-    return s
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-}
 editableDivs.forEach(divId => {
     const el = document.getElementById(divId)
     if (!el) return
@@ -741,7 +735,7 @@ function toggleIdeology(ideologyButton) {
         }
         else {
             button.style.border = "3px solid #303030"
-            button.style.outline = "3px solid #404040"
+            button.style.outline = ""
         }
     }
     const ideologyName = ideologies[selectedIdeology]
@@ -808,12 +802,170 @@ function toggleSubideology(subideologyButton) {
     else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) { portrait.style.backgroundImage = "url(./Wrangel.png)" }
 }
 let percentages = [5, 5, 0, 0, 0, 0, 10, 10, 15, 40, 15]
-let lockedPercentages = new Array(colors.length).fill(false)
+let lockedPercentages = new Array(percentages.length).fill(false)
+let pieChartOrder = [...Array(percentages.length).keys()]
+const updateControlStates = () => {
+    const unlockedCount = lockedPercentages.filter(locked => !locked).length
+    for (let i = 0; i < percentages.length; i++) {
+        const input = document.querySelector(`input[data-index="${i}"]`)
+        const lockBtn = document.querySelector(`div[data-index="${i}"]:nth-child(2)`)
+        const clearBtn = document.querySelector(`div[data-index="${i}"]:last-child`)
+        if (input && lockBtn && clearBtn) {
+            input.disabled = lockedPercentages[i]
+            input.readOnly = !lockedPercentages[i] && unlockedCount <= 1
+            const bgColor = lockedPercentages[i] ? "#404040" : "#f0f0f0"
+            lockBtn.style.background = `${bgColor} url(./lock.svg) no-repeat center`
+            lockBtn.style.backgroundSize = "14px"
+            clearBtn.style.background = `${bgColor} url(./clear.svg) no-repeat center`
+            clearBtn.style.backgroundSize = "14px"
+        }
+    }
+}
+function canDistribute(excludeIndex) {
+    return lockedPercentages.some((locked, i) => !locked && i !== excludeIndex)
+}
+function createColorTool(index, initialColor) {
+    const colorTool = document.createElement("div")
+    colorTool.className = "popularityColor"
+    colorTool.dataset.index = index
+    colorTool.style.backgroundColor = initialColor
+    const leftButton = document.createElement("button")
+    leftButton.className = "colorLeft"
+    leftButton.addEventListener("click", () => shiftColorLeft(index))
+    const colorInput = document.createElement("input")
+    colorInput.className = "colorInput"
+    colorInput.type = "text"
+    colorInput.value = initialColor.replace('#', '')
+    colorInput.maxLength = 6
+    colorInput.addEventListener("input", function () {
+        let filteredValue = this.value.toLowerCase().replace(/[^0-9a-f]/g, '')
+        this.value = filteredValue
+        updateColorFromInput(index, filteredValue)
+    })
+    const rightButton = document.createElement("button")
+    rightButton.className = "colorRight"
+    rightButton.addEventListener("click", () => shiftColorRight(index))
+    colorTool.appendChild(leftButton)
+    colorTool.appendChild(colorInput)
+    colorTool.appendChild(rightButton)
+    document.getElementById("popularityColors").appendChild(colorTool)
+}
+function shiftColorLeft(index) {
+    const currentPosition = pieChartOrder.indexOf(index)
+    const newPosition = currentPosition <= 0 ? pieChartOrder.length - 1 : currentPosition - 1
+    pieChartOrder.splice(currentPosition, 1)
+    pieChartOrder.splice(newPosition, 0, index)
+    updateChart()
+}
+function shiftColorRight(index) {
+    const currentPosition = pieChartOrder.indexOf(index)
+    const newPosition = currentPosition >= pieChartOrder.length - 1 ? 0 : currentPosition + 1
+    pieChartOrder.splice(currentPosition, 1)
+    pieChartOrder.splice(newPosition, 0, index)
+    updateChart()
+}
+function updateColorFromInput(index, hexValue) {
+    const validHex = /^[0-9a-f]{6}$/.test(hexValue)
+    if (!validHex) return
+    const color = `#${hexValue}`
+    const percentageControl = document.querySelector(`.percentageControl input[data-index="${index}"]`).parentElement
+    if (percentageControl) percentageControl.style.backgroundColor = color
+    const colorTool = document.querySelector(`.popularityColor[data-index="${index}"]`)
+    if (colorTool) colorTool.style.backgroundColor = color
+    updateChart()
+}
+function addColor() {
+    const newIndex = percentages.length
+    percentages.push(0)
+    lockedPercentages.push(false)
+    pieChartOrder.push(newIndex)
+    const colorCycle = ["ff0000", "ffff00", "00ff00", "0080ff"]
+    const defaultColor = "#" + colorCycle[(newIndex - 11) % colorCycle.length]
+    const wrapper = document.createElement("div")
+    wrapper.className = "percentageControl"
+    wrapper.style.backgroundColor = defaultColor
+    const input = document.createElement("input")
+    input.type = "number"
+    input.min = "0"
+    input.max = "100"
+    input.value = 0
+    input.dataset.index = newIndex
+    input.addEventListener("input", function () {
+        if (this.readOnly || lockedPercentages[newIndex]) {
+            this.value = percentages[newIndex]
+            return
+        }
+        handlePercentageChange(this)
+    })
+    const lockBox = document.createElement("div")
+    lockBox.dataset.index = newIndex
+    lockBox.addEventListener("click", function () {
+        const idx = parseInt(this.dataset.index)
+        lockedPercentages[idx] = !lockedPercentages[idx]
+        updateControlStates()
+    })
+    const clearBox = document.createElement("div")
+    clearBox.classList.add("clearBox")
+    clearBox.dataset.index = newIndex
+    clearBox.addEventListener("click", function () {
+        const idx = parseInt(this.dataset.index)
+        if (!canDistribute(idx)) return
+        const oldValue = percentages[idx]
+        percentages[idx] = 0
+        let remaining = oldValue
+        const unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i] && i !== idx)
+        while (remaining > 0 && unlockedIndices.length > 0) {
+            const minValue = Math.min(...unlockedIndices.map(i => percentages[i]))
+            const minIndices = unlockedIndices.filter(i => percentages[i] === minValue)
+            minIndices.forEach(i => {
+                if (remaining > 0) {
+                    percentages[i]++
+                    remaining--
+                }
+            })
+        }
+        updateInputs()
+        updateChart()
+    })
+    wrapper.appendChild(input)
+    wrapper.appendChild(lockBox)
+    wrapper.appendChild(clearBox)
+    document.getElementById("popularityInputs").insertBefore(wrapper, document.getElementById("colorButtonHolder"))
+    createColorTool(newIndex, defaultColor)
+    document.getElementById("popularityColors").style.display = "flex"
+    updateControlStates()
+    updateChart()
+}
+function removeColor() {
+    if (percentages.length <= 11) return
+    const lastIndex = percentages.length - 1
+    const valueToDistribute = percentages[lastIndex]
+    document.querySelectorAll('.popularityColor')[document.querySelectorAll('.popularityColor').length - 1]?.remove()
+    percentages.pop()
+    lockedPercentages.pop()
+    pieChartOrder = pieChartOrder.filter(idx => idx !== lastIndex).map(idx => idx > lastIndex ? idx - 1 : idx)
+    document.querySelectorAll('.percentageControl')[document.querySelectorAll('.percentageControl').length - 1]?.remove()
+    if (percentages.length <= 11) document.getElementById("popularityColors").style.display = "none"
+    let remaining = valueToDistribute
+    const unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i])
+    while (remaining > 0 && unlockedIndices.length > 0) {
+        const minValue = Math.min(...unlockedIndices.map(i => percentages[i]))
+        const minIndices = unlockedIndices.filter(i => percentages[i] === minValue)
+        minIndices.forEach(i => {
+            if (remaining > 0) {
+                percentages[i]++
+                remaining--
+            }
+        })
+    }
+    updateInputs()
+    updateControlStates()
+    updateChart()
+}
 function createInputs() {
     const toolsDiv = document.getElementById("popularityTools")
     toolsDiv.innerHTML = ""
     const inputsDiv = document.getElementById("popularityInputs")
-    inputsDiv.innerHTML = ""
     const equalizeBtn = document.createElement("button")
     equalizeBtn.id = "equalizationButton"
     equalizeBtn.textContent = "Equalize"
@@ -829,34 +981,16 @@ function createInputs() {
     ideologizeBtn.textContent = "Ideologize"
     ideologizeBtn.addEventListener("click", ideologizePercentages)
     toolsDiv.appendChild(ideologizeBtn)
-    const updateControlStates = () => {
-        const unlockedCount = lockedPercentages.filter(locked => !locked).length
-        for (let i = 0; i < colors.length; i++) {
-            const input = document.querySelector(`input[data-index="${i}"]`)
-            const lockBtn = document.querySelector(`div[data-index="${i}"]:nth-child(2)`)
-            const clearBtn = document.querySelector(`div[data-index="${i}"]:last-child`)
-            input.disabled = lockedPercentages[i]
-            input.readOnly = !lockedPercentages[i] && unlockedCount <= 1
-            const bgColor = lockedPercentages[i] ? "#404040" : "#f0f0f0"
-            lockBtn.style.background = `${bgColor} url(./lock.svg) no-repeat center`
-            lockBtn.style.backgroundSize = "60%"
-            clearBtn.style.background = `${bgColor} url(./clear.svg) no-repeat center`
-            clearBtn.style.backgroundSize = "60%"
-        }
-    }
-    const canDistribute = (excludeIndex) => {
-        return lockedPercentages.some((locked, i) => !locked && i !== excludeIndex)
-    }
     for (let i = 0; i < colors.length; i++) {
         const wrapper = document.createElement("div")
         wrapper.className = "percentageControl"
+        wrapper.style.backgroundColor = colors[i]
         const input = document.createElement("input")
         input.type = "number"
         input.min = "0"
         input.max = "100"
         input.value = percentages[i]
         input.dataset.index = i
-        input.style.outline = `3px solid ${colors[i]}`
         input.addEventListener("input", function () {
             if (this.readOnly || lockedPercentages[i]) {
                 this.value = percentages[i]
@@ -865,7 +999,6 @@ function createInputs() {
             handlePercentageChange(this)
         })
         const lockBox = document.createElement("div")
-        lockBox.style.outline = `3px solid ${colors[i]}`
         lockBox.dataset.index = i
         lockBox.addEventListener("click", function () {
             const idx = parseInt(this.dataset.index)
@@ -874,7 +1007,6 @@ function createInputs() {
         })
         const clearBox = document.createElement("div")
         clearBox.classList.add("clearBox")
-        clearBox.style.outline = `3px solid ${colors[i]}`
         clearBox.dataset.index = i
         clearBox.addEventListener("click", function () {
             const idx = parseInt(this.dataset.index)
@@ -895,18 +1027,32 @@ function createInputs() {
             }
             updateInputs()
             updateChart()
-            updateControlStates()
         })
         wrapper.appendChild(input)
         wrapper.appendChild(lockBox)
         wrapper.appendChild(clearBox)
         inputsDiv.appendChild(wrapper)
     }
+    const colorButtonHolder = document.createElement("div")
+    colorButtonHolder.id = "colorButtonHolder"
+    const removeColorButton = document.createElement("button")
+    removeColorButton.id = "removeColorButton"
+    removeColorButton.style.background = "#404040 url(./remove.svg) no-repeat center"
+    removeColorButton.style.backgroundSize = "18px"
+    removeColorButton.addEventListener("click", function () { removeColor() })
+    colorButtonHolder.appendChild(removeColorButton)
+    const addColorButton = document.createElement("button")
+    addColorButton.id = "addColorButton"
+    addColorButton.style.background = "#404040 url(./add.svg) no-repeat center"
+    addColorButton.style.backgroundSize = "18px"
+    addColorButton.addEventListener("click", function () { addColor() })
+    colorButtonHolder.appendChild(addColorButton)
+    inputsDiv.appendChild(colorButtonHolder)
     updateControlStates()
 }
 function ideologizePercentages() {
     if (selectedIdeology < 0 || lockedPercentages.some(locked => locked)) return
-    const pattern = [2, 3, 5, 10, 15, 30, 15, 10, 5, 3, 2]
+    const pattern = [5, 6, 7, 8, 9, 30, 9, 8, 7, 6, 5]
     let remaining = 100
     for (let i = 0; i < ideologies.length; i++) {
         if (lockedPercentages[i]) remaining -= percentages[i]
@@ -959,8 +1105,8 @@ function handlePercentageChange(input) {
     const maxAllowed = 100 - lockedTotal
     if (newValue > maxAllowed) {
         newValue = maxAllowed
-        input.value = newValue
     }
+    input.value = newValue
     percentages[index] = newValue
     const difference = newValue - oldValue
     if (difference !== 0) {
@@ -1027,16 +1173,16 @@ function updateInputs() {
 function updateChart() {
     let cumulative = 0
     let gradientStops = []
-    for (let i = 0; i < colors.length; i++) {
-        if (percentages[i] > 0) {
+    for (let i = 0; i < pieChartOrder.length; i++) {
+        const index = pieChartOrder[i]
+        if (percentages[index] > 0) {
+            let color = index < 11 ? colors[index] : document.querySelector(`.percentageControl input[data-index="${index}"]`).parentElement.style.backgroundColor
             const start = cumulative
-            cumulative += percentages[i]
-            const end = cumulative
-            gradientStops.push(`${colors[i]} ${start}% ${end}%`)
+            cumulative += percentages[index]
+            gradientStops.push(`${color} ${start}% ${cumulative}%`)
         }
     }
     document.getElementById("pieChart").style.background = `conic-gradient(${gradientStops.join(", ")})`
-    setTimeout(updateInputs, 0)
 }
 document.getElementById("randomizeIdeology").addEventListener("click", randomizeSubideology)
 document.getElementById("randomizeStability").addEventListener("click", () => {

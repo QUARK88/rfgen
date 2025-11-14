@@ -65,7 +65,9 @@ ideology:hover,
 #diploDownload:hover,
 #toleranceSlider:hover,
 #portraitTools button:hover,
-.backgroundContainer:hover {
+.backgroundContainer:hover,
+#colorButtonHolder button:hover,
+#popularityColors button:hover {
     filter: brightness(1.1);
 }
 
@@ -457,7 +459,9 @@ ideology:active,
 #randomizationButton:active,
 #ideologizationButton:active,
 #diploDownload:active,
-#portraitTools button:active {
+#portraitTools button:active,
+#colorButtonHolder button:active,
+#popularityColors button:active {
     filter: brightness(.9);
 }
 
@@ -537,14 +541,15 @@ ideology div {
     color: var(--white);
     background-color: var(--button);
     cursor: pointer;
-    padding: 12px;
+    padding: 0 12px;
     width: 100%;
-    height: 48px;
+    height: 32px;
 }
 
 #popularityTools button,
 #diploDownload,
-#portraitTools button {
+#portraitTools button,
+#colorButtonHolder button {
     border: none;
     border-radius: 6px;
     font-family: futura;
@@ -561,44 +566,44 @@ ideology div {
 #popularityInputs {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin: 8px 0;
-    justify-content: center;
+    gap: 6px;
+    justify-content: left;
 }
 
 .percentageControl {
     display: flex;
     align-items: center;
+    padding: 3px;
+    border-radius: 15px;
+    gap: 3px;
 }
 
 .percentageControl input {
-    padding: 8px;
-    border: none;
+    padding: 0 4px 0 8px;
     border-radius: 12px 0 0 12px;
-    width: 44px;
+    width: 52px;
     border: solid 2px var(--background);
     background-color: var(--white);
     transition: .15s;
     color: var(--background);
+    height: 28px;
+    outline: none;
 }
 
 .percentageControl div {
-    width: 24px;
-    height: 32px;
+    width: 22px;
+    height: 28px;
     cursor: pointer;
     border: solid 2px var(--background);
-    margin-left: 3px;
     transition: .15s;
 }
 
 .percentageControl div:hover {
     filter: brightness(1.1);
-    z-index: 1;
 }
 
 .percentageControl div:active {
     filter: brightness(.9);
-    z-index: 1;
 }
 
 .clearBox {
@@ -608,6 +613,75 @@ ideology div {
 input:disabled {
     background-color: var(--button);
     color: var(--white);
+}
+
+#colorButtonHolder {
+    display: flex;
+    width: 132px;
+    height: 38px;
+    gap: 6px;
+    border-radius: 15px;
+}
+
+#removeColorButton {
+    border-radius: 15px 0 0 15px !important;
+}
+
+#addColorButton {
+    border-radius: 0 15px 15px 0 !important;
+}
+
+#popularityColors {
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.popularityColor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 132px;
+    height: 38px;
+    gap: 3px;
+    border-radius: 15px;
+    background-color: var(--white);
+}
+
+.colorLeft {
+    background: url(./left.svg) no-repeat center;
+    background-size: 14px;
+    width: 26px;
+    height: 32px;
+    padding: 0;
+    border-radius: 12px 0 0 12px;
+    border: solid 2px var(--background);
+    background-color: var(--white);
+    cursor: pointer;
+}
+
+.colorInput {
+    width: 48px;
+    height: 28px;
+    padding: 0 8px;
+    border: none;
+    color: var(--black);
+    outline: none;
+    text-align: center;
+    border: solid 2px var(--background);
+    background-color: var(--white);
+}
+
+.colorRight {
+    background: url(./right.svg) no-repeat center;
+    background-size: 14px;
+    width: 26px;
+    height: 32px;
+    padding: 0;
+    border-radius: 0 12px 12px 0;
+    border: solid 2px var(--background);
+    background-color: var(--white);
+    cursor: pointer;
 }
 
 #eventSection,
