@@ -1101,7 +1101,7 @@ input:disabled {
         justify-content: center;
     }
 
-    #popularityInputs {
+    #popularityInputs,#popularityColors {
         gap: 16px;
         margin: 8px 0;
     }
