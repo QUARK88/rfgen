@@ -1037,14 +1037,10 @@ function createInputs() {
     colorButtonHolder.id = "colorButtonHolder"
     const removeColorButton = document.createElement("button")
     removeColorButton.id = "removeColorButton"
-    removeColorButton.style.background = "#404040 url(./remove.svg) no-repeat center"
-    removeColorButton.style.backgroundSize = "18px"
     removeColorButton.addEventListener("click", function () { removeColor() })
     colorButtonHolder.appendChild(removeColorButton)
     const addColorButton = document.createElement("button")
     addColorButton.id = "addColorButton"
-    addColorButton.style.background = "#404040 url(./add.svg) no-repeat center"
-    addColorButton.style.backgroundSize = "18px"
     addColorButton.addEventListener("click", function () { addColor() })
     colorButtonHolder.appendChild(addColorButton)
     inputsDiv.appendChild(colorButtonHolder)
