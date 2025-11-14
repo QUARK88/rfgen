@@ -650,7 +650,7 @@ input:disabled {
 
 .colorLeft {
     background: url(./left.svg) no-repeat center;
-    background-size: 14px;
+    background-size: 18px;
     width: 26px;
     height: 32px;
     padding: 0;
@@ -674,7 +674,7 @@ input:disabled {
 
 .colorRight {
     background: url(./right.svg) no-repeat center;
-    background-size: 14px;
+    background-size: 18px;
     width: 26px;
     height: 32px;
     padding: 0;
@@ -1115,4 +1115,5 @@ input:disabled {
     #newsButtons {
         width: 100%;
     }
+
 }
