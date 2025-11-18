@@ -847,9 +847,15 @@ function createColorTool(index, initialColor) {
     colorInputText.className = "colorInputText"
     colorInputText.type = "text"
     colorInputText.value = initialColor.replace("#", "")
-    colorInputText.maxLength = 6
     colorInputText.addEventListener("input", function () {
-        updateColorFromInput(index, this.value.toLowerCase().replace(/[^0-9a-f]/g, ""))
+        let filteredValue = this.value.toLowerCase().replace(/[^0-9a-f]/g, "")
+        filteredValue = filteredValue.substring(0, 6)
+        this.value = filteredValue
+        updateColorFromInput(index, filteredValue)
+        const colorInputMenu = this.parentElement.querySelector(".colorInputMenu")
+        if (colorInputMenu && filteredValue.length === 6) {
+            colorInputMenu.value = `#${filteredValue}`
+        }
     })
     colorTool.appendChild(colorInputText)
     const rightButton = document.createElement("button")
