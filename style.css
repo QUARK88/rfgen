@@ -67,7 +67,8 @@ ideology:hover,
 #portraitTools button:hover,
 .backgroundContainer:hover,
 #colorButtonHolder button:hover,
-#popularityColors button:hover {
+#popularityColors button:hover,
+.colorInputMenu:hover {
     filter: brightness(1.1);
 }
 
@@ -461,7 +462,8 @@ ideology:active,
 #diploDownload:active,
 #portraitTools button:active,
 #colorButtonHolder button:active,
-#popularityColors button:active {
+#popularityColors button:active,
+.colorInputMenu:active {
     filter: brightness(.9);
 }
 
@@ -572,8 +574,10 @@ ideology div {
 
 .percentageControl {
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 3px;
+    height: 38px;
+    width: 132px;
     border-radius: 15px;
     gap: 3px;
 }
@@ -654,21 +658,35 @@ input:disabled {
 
 .colorLeft {
     background: url(./left.svg) no-repeat center;
-    background-size: 14px;
-    width: 26px;
-    height: 32px;
-    padding: 0;
     border-radius: 12px 0 0 12px;
-    border: solid 2px var(--background);
-    background-color: var(--white);
-    cursor: pointer;
 }
 
-.colorInput {
+.colorInputMenu {
+    width: 17px;
+    height: 32px;
+    padding: 0;
+    border: solid 2px var(--background);
+    cursor: pointer;
+    background: transparent;
+}
+
+.colorInputMenu::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.colorInputMenu::-webkit-color-swatch {
+    border: none;
+    border-radius: 0;
+}
+
+.colorInputMenu::-moz-color-swatch {
+    border: none;
+}
+
+.colorInputText {
     width: 48px;
     height: 28px;
-    padding: 0 8px;
-    border: none;
+    padding: 0 4px;
     color: var(--black);
     outline: none;
     text-align: center;
@@ -678,11 +696,15 @@ input:disabled {
 
 .colorRight {
     background: url(./right.svg) no-repeat center;
+    border-radius: 0 12px 12px 0;
+}
+
+.colorLeft,
+.colorRight {
     background-size: 14px;
-    width: 26px;
+    width: 20px;
     height: 32px;
     padding: 0;
-    border-radius: 0 12px 12px 0;
     border: solid 2px var(--background);
     background-color: var(--white);
     cursor: pointer;
@@ -1101,11 +1123,8 @@ input:disabled {
         padding: 0 16px;
     }
 
-    .picker {
-        justify-content: center;
-    }
-
-    #popularityInputs,#popularityColors {
+    #popularityInputs,
+    #popularityColors {
         gap: 16px;
         margin: 8px 0;
     }
@@ -1121,4 +1140,3 @@ input:disabled {
     }
 
 }
-

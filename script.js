@@ -831,22 +831,31 @@ function createColorTool(index, initialColor) {
     colorTool.style.backgroundColor = initialColor
     const leftButton = document.createElement("button")
     leftButton.className = "colorLeft"
+    leftButton.title = "Move color left"
     leftButton.addEventListener("click", () => shiftColorLeft(index))
-    const colorInput = document.createElement("input")
-    colorInput.className = "colorInput"
-    colorInput.type = "text"
-    colorInput.value = initialColor.replace('#', '')
-    colorInput.maxLength = 6
-    colorInput.addEventListener("input", function () {
-        let filteredValue = this.value.toLowerCase().replace(/[^0-9a-f]/g, '')
-        this.value = filteredValue
-        updateColorFromInput(index, filteredValue)
+    colorTool.appendChild(leftButton)
+    const colorInputMenu = document.createElement("input")
+    colorInputMenu.className = "colorInputMenu"
+    colorInputMenu.type = "color"
+    colorInputMenu.value = initialColor
+    colorInputMenu.title = "Open color picker"
+    colorInputMenu.addEventListener("input", function () {
+        updateColorFromInput(index, this.value.toLowerCase().replace(/[^0-9a-f]/g, ""))
     })
+    colorTool.appendChild(colorInputMenu)
+    const colorInputText = document.createElement("input")
+    colorInputText.className = "colorInputText"
+    colorInputText.type = "text"
+    colorInputText.value = initialColor.replace("#", "")
+    colorInputText.maxLength = 6
+    colorInputText.addEventListener("input", function () {
+        updateColorFromInput(index, this.value.toLowerCase().replace(/[^0-9a-f]/g, ""))
+    })
+    colorTool.appendChild(colorInputText)
     const rightButton = document.createElement("button")
     rightButton.className = "colorRight"
+    rightButton.title = "Move color right"
     rightButton.addEventListener("click", () => shiftColorRight(index))
-    colorTool.appendChild(leftButton)
-    colorTool.appendChild(colorInput)
     colorTool.appendChild(rightButton)
     document.getElementById("popularityColors").appendChild(colorTool)
 }
@@ -872,6 +881,8 @@ function updateColorFromInput(index, hexValue) {
     if (percentageControl) percentageControl.style.backgroundColor = color
     const colorTool = document.querySelector(`.popularityColor[data-index="${index}"]`)
     if (colorTool) colorTool.style.backgroundColor = color
+    const colorInputText = document.querySelector(`.popularityColor[data-index="${index}"] .colorInputText`)
+    if (colorInputText) colorInputText.value = hexValue
     updateChart()
 }
 function addColor() {
@@ -899,6 +910,7 @@ function addColor() {
     })
     const lockBox = document.createElement("div")
     lockBox.dataset.index = newIndex
+    lockBox.title = "Lock percentage"
     lockBox.addEventListener("click", function () {
         const idx = parseInt(this.dataset.index)
         lockedPercentages[idx] = !lockedPercentages[idx]
@@ -907,6 +919,7 @@ function addColor() {
     const clearBox = document.createElement("div")
     clearBox.classList.add("clearBox")
     clearBox.dataset.index = newIndex
+    clearBox.title = "Clear percentage"
     clearBox.addEventListener("click", function () {
         const idx = parseInt(this.dataset.index)
         if (!canDistribute(idx)) return
@@ -940,11 +953,11 @@ function removeColor() {
     if (percentages.length <= 11) return
     const lastIndex = percentages.length - 1
     const valueToDistribute = percentages[lastIndex]
-    document.querySelectorAll('.popularityColor')[document.querySelectorAll('.popularityColor').length - 1]?.remove()
+    document.querySelectorAll(".popularityColor")[document.querySelectorAll(".popularityColor").length - 1]?.remove()
     percentages.pop()
     lockedPercentages.pop()
     pieChartOrder = pieChartOrder.filter(idx => idx !== lastIndex).map(idx => idx > lastIndex ? idx - 1 : idx)
-    document.querySelectorAll('.percentageControl')[document.querySelectorAll('.percentageControl').length - 1]?.remove()
+    document.querySelectorAll(".percentageControl")[document.querySelectorAll(".percentageControl").length - 1]?.remove()
     if (percentages.length <= 11) document.getElementById("popularityColors").style.display = "none"
     let remaining = valueToDistribute
     const unlockedIndices = percentages.map((_, i) => i).filter(i => !lockedPercentages[i])
@@ -1000,6 +1013,7 @@ function createInputs() {
         })
         const lockBox = document.createElement("div")
         lockBox.dataset.index = i
+        lockBox.title = "Lock percentage"
         lockBox.addEventListener("click", function () {
             const idx = parseInt(this.dataset.index)
             lockedPercentages[idx] = !lockedPercentages[idx]
@@ -1008,6 +1022,7 @@ function createInputs() {
         const clearBox = document.createElement("div")
         clearBox.classList.add("clearBox")
         clearBox.dataset.index = i
+        clearBox.title = "Clear percentage"
         clearBox.addEventListener("click", function () {
             const idx = parseInt(this.dataset.index)
             if (!canDistribute(idx)) return
@@ -1037,10 +1052,12 @@ function createInputs() {
     colorButtonHolder.id = "colorButtonHolder"
     const removeColorButton = document.createElement("button")
     removeColorButton.id = "removeColorButton"
+    removeColorButton.title = "Remove color"
     removeColorButton.addEventListener("click", function () { removeColor() })
     colorButtonHolder.appendChild(removeColorButton)
     const addColorButton = document.createElement("button")
     addColorButton.id = "addColorButton"
+    addColorButton.title = "Add color"
     addColorButton.addEventListener("click", function () { addColor() })
     colorButtonHolder.appendChild(addColorButton)
     inputsDiv.appendChild(colorButtonHolder)
@@ -1206,7 +1223,9 @@ function randomizeSubideology() {
 }
 createInputs()
 updateChart()
-function makeImagesNonDraggable() { document.querySelectorAll('img').forEach(img => { img.setAttribute('draggable', 'false') }) }
-document.addEventListener('DOMContentLoaded', makeImagesNonDraggable)
+function makeImagesNonDraggable() { document.querySelectorAll("img").forEach(img => { img.setAttribute("draggable", "false") }) }
+document.addEventListener("DOMContentLoaded", makeImagesNonDraggable)
+function makeLinksNonDraggable() { document.querySelectorAll("a").forEach(a => { a.setAttribute("draggable", "false") }) }
+document.addEventListener("DOMContentLoaded", makeLinksNonDraggable)
 const observer = new MutationObserver((mutations) => { mutations.forEach((mutation) => { if (mutation.addedNodes.length) { makeImagesNonDraggable() } }) })
 observer.observe(document.body, { childList: true, subtree: true })
