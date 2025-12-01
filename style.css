@@ -785,10 +785,10 @@ input:disabled {
     justify-content: center;
     position: absolute;
     height: 126px;
-    width: 476px;
+    width: 452px;
     left: 65px;
     top: 345px;
-    padding-top: 30px;
+    padding: 30px 12px 0 12px;
     color: var(--white);
     font-family: futura;
     text-align: center;
