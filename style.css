@@ -264,7 +264,7 @@ ideology:hover,
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url(./Flag.png);
+    background-image: url(./flag.png);
     background-color: #000;
 }
 
@@ -397,7 +397,7 @@ ideology:hover,
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url(./Focus.png);
+    background-image: url(./focus.png);
     cursor: pointer;
 }
 
