@@ -42,33 +42,44 @@ const dropZones = {
 Object.keys(dropZones).forEach(dropZoneId => {
     const dropZone = document.getElementById(dropZoneId)
     const targetId = dropZones[dropZoneId]
-    document.addEventListener("dragover", (e) => {
+    document.addEventListener("dragover", e => {
         e.preventDefault()
-        dropZone.classList.add("highlight")
+        Object.keys(dropZones).forEach(id => {
+            document.getElementById(id).classList.add("highlight")
+        })
     })
-    document.addEventListener("dragleave", () => {
-        dropZone.classList.remove("highlight")
+    document.addEventListener("dragleave", e => {
+        if (!e.relatedTarget || e.relatedTarget.nodeType === 3) {
+            Object.keys(dropZones).forEach(id => {
+                document.getElementById(id).classList.remove("highlight")
+            })
+        }
     })
-    dropZone.addEventListener("dragover", (e) => {
+    document.addEventListener("drop", e => {
+        e.preventDefault()
+        Object.keys(dropZones).forEach(id => {
+            document.getElementById(id).classList.remove("highlight")
+        })
+    })
+    dropZone.addEventListener("dragover", e => {
         e.preventDefault()
         dropZone.classList.add("highlight2")
     })
-    dropZone.addEventListener("dragleave", () => {
-        dropZone.classList.remove("highlight2")
+    dropZone.addEventListener("dragleave", e => {
+        if (!e.relatedTarget || !dropZone.contains(e.relatedTarget)) {
+            dropZone.classList.remove("highlight2")
+        }
     })
-    dropZone.addEventListener("drop", (e) => {
+    dropZone.addEventListener("drop", async e => {
         e.preventDefault()
         Object.keys(dropZones).forEach(id => {
-            const zone = document.getElementById(id)
-            if (zone) {
-                zone.classList.remove("highlight")
-                zone.classList.remove("highlight2")
-            }
+            document.getElementById(id).classList.remove("highlight")
+            document.getElementById(id).classList.remove("highlight2")
         })
         const file = e.dataTransfer.files[0]
         if (file && file.type.match("image.*")) {
             const reader = new FileReader()
-            reader.onload = (event) => {
+            reader.onload = async event => {
                 const target = document.getElementById(targetId)
                 if (dropZoneId === "portraitScreenshot") {
                     state.uploadedImage = event.target.result
@@ -248,7 +259,7 @@ document.getElementById("portraitDownload").addEventListener("click", async () =
         const dataURL = await htmlToImage.toPng(clone, options)
         const link = document.createElement("a")
         link.href = dataURL
-        link.download = `Red Flood Portrait.png`
+        link.download = `Red Flood Portrait ${removedBackground}.png`
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
@@ -281,7 +292,7 @@ const elements = {
     portraitColor: document.getElementById("portraitColor")
 }
 const initializePlaceholder = () => {
-    elements.portraitScreenshot.style.background = `url("./portraitPlaceholder.png") center/cover no-repeat,white`
+    elements.portraitScreenshot.style.background = `url(./portraits/portraitPlaceholder.png) center/cover no-repeat,white`
     elements.portraitScreenshot.innerHTML = ""
     state.hasUploadedImage = false
 }
@@ -382,6 +393,7 @@ async function processImage() {
         state.isProcessing = false
     }
 }
+let removedBackground = ""
 async function sortBackgroundsByRemoval(compositeImg) {
     const backgroundScores = []
     const SORTING_TOLERANCE = 20
@@ -418,7 +430,11 @@ async function sortBackgroundsByRemoval(compositeImg) {
             console.error(`Error processing ${ideology}:`, e)
         }
     }
-    return backgroundScores.sort((a, b) => b.score - a.score).map(item => item.ideology)
+    const sortedBackgrounds = backgroundScores.sort((a, b) => b.score - a.score).map(item => item.ideology)
+    if (sortedBackgrounds.length > 0) {
+        removedBackground = sortedBackgrounds[0]
+    }
+    return sortedBackgrounds
 }
 elements.portraitUpload2.addEventListener("change", async function (e) {
     const file = e.target.files[0]
@@ -470,6 +486,7 @@ function rebuildBackgroundSelector(backgrounds) {
             })
             container.classList.add("selectedBackground")
             state.selectedBackground = ideology
+            removedBackground = ideology
             await processImage()
         })
         container.appendChild(img)
@@ -739,15 +756,23 @@ function toggleIdeology(ideologyButton) {
         }
     }
     const ideologyName = ideologies[selectedIdeology]
-    document.getElementById("icon").style.backgroundImage = `url("./icon/${ideologyName}.png")`
-    document.getElementById("portraitBackground").style.backgroundImage = `url("./portraitBackground/${ideologyName}.png")`
+    const encodedIdeologyName = encodeURIComponent(ideologyName)
+    document.getElementById("icon").style.backgroundImage = `url("./icon/${encodedIdeologyName}.png")`
+    document.getElementById("portraitBackground").style.backgroundImage = `url("./portraitBackground/${encodedIdeologyName}.png")`
     document.getElementById("ideology").innerText = ideologyName
     document.getElementById("subideology").innerText = ideologyName
     document.getElementById("ideologyDescription").innerHTML = descriptions[ideologyName] || ""
-    const portrait = document.getElementById("portrait")
-    const currentPortrait = getComputedStyle(portrait).backgroundImage
-    if (currentPortrait.includes("Polzl.png")) { portrait.style.backgroundImage = "url(./Wrangel.png)" }
+    updatePortraitForIdeology(selectedIdeology)
     updateSubideologies()
+}
+function updatePortraitForIdeology(ideologyIndex) {
+    const portrait = document.getElementById("portrait")
+    const portraitFiles = ["Cioran", "Rosenbaum", "Deat", "Reiling", "Candace", "Calles", "Mises", "Chamberlain", "Jabotinsky", "Wrangel", "Maurras", "Polzl"]
+    const currentBg = getComputedStyle(portrait).backgroundImage
+    const isCustomPortrait = currentBg.includes("data:image/")
+    if (!isCustomPortrait && portraitFiles[ideologyIndex]) {
+        portrait.style.backgroundImage = `url(./portraits/${portraitFiles[ideologyIndex]}.png)`
+    }
 }
 let selectedIdeology = -1
 let selectedSubideology = -1
@@ -761,6 +786,8 @@ function initIdeologies() {
         ideologyElement.addEventListener("click", function () { toggleIdeology(this) })
         document.getElementById("ideologyPicker").appendChild(ideologyElement)
         ideologyButtons.push(ideologyElement)
+    }
+    if (ideologyButtons.length > 0) {
     }
 }
 function updateSubideologies() {
@@ -785,8 +812,7 @@ function toggleSubideology(subideologyButton) {
         if (i === selectedSubideology) {
             button.style.border = "3px solid #505050"
             button.style.outline = `3px solid ${colors[selectedIdeology]}`
-        }
-        else {
+        } else {
             button.style.border = "3px solid #303030"
             button.style.outline = "3px solid #404040"
         }
@@ -796,10 +822,14 @@ function toggleSubideology(subideologyButton) {
     document.getElementById("subideology").innerText = subideologyName
     document.getElementById("subideologyDescription").innerHTML = descriptions[subideologyName] || ""
     const portrait = document.getElementById("portrait")
-    const currentPortrait = getComputedStyle(portrait).backgroundImage
-    const isSpecialSubideology = subideologyName === "Spartakism" || subideologyName === "Leninism"
-    if (currentPortrait.includes("Wrangel.png") && isSpecialSubideology) { portrait.style.backgroundImage = "url(./Polzl.png)" }
-    else if (currentPortrait.includes("Polzl.png") && !isSpecialSubideology) { portrait.style.backgroundImage = "url(./Wrangel.png)" }
+    const currentBg = getComputedStyle(portrait).backgroundImage
+    const isSpecial = subideologyName === "Spartakism" || subideologyName === "Leninism"
+    const isCustomPortrait = currentBg.includes("data:image/")
+    if (isSpecial && !isCustomPortrait) {
+        portrait.style.backgroundImage = "url(./portraits/Polzl.png)"
+    } else if (!isSpecial) {
+        updatePortraitForIdeology(selectedIdeology)
+    }
 }
 let percentages = [5, 5, 0, 0, 0, 0, 10, 10, 15, 40, 15]
 let lockedPercentages = new Array(percentages.length).fill(false)

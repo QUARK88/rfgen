@@ -372,7 +372,7 @@ ideology:hover,
     background-size: contain;
     background-position: bottom;
     background-repeat: no-repeat;
-    background-image: url(./Wrangel.png);
+    background-image: url(./portraits/Wrangel.png);
 }
 
 #pieChart {
@@ -979,7 +979,7 @@ input:disabled {
     background-size: contain;
     background-position: bottom;
     background-repeat: no-repeat;
-    background-image: url(./portraitPlaceholder.png);
+    background-image: url(./portraits/portraitPlaceholder.png);
     background-color: #fff;
 }
 
