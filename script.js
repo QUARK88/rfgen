@@ -770,7 +770,8 @@ function updatePortraitForIdeology(ideologyIndex) {
     const portraitFiles = ["Cioran", "Rosenbaum", "Deat", "Reiling", "Candace", "Calles", "Mises", "Chamberlain", "Jabotinsky", "Wrangel", "Maurras", "Polzl"]
     const currentBg = getComputedStyle(portrait).backgroundImage
     const isCustomPortrait = currentBg.includes("data:image/")
-    if (!isCustomPortrait && portraitFiles[ideologyIndex]) {
+    const isEmpty = currentBg === "none" || currentBg === ""
+    if (!isCustomPortrait && !isEmpty && portraitFiles[ideologyIndex]) {
         portrait.style.backgroundImage = `url(./portraits/${portraitFiles[ideologyIndex]}.png)`
     }
 }
@@ -825,7 +826,8 @@ function toggleSubideology(subideologyButton) {
     const currentBg = getComputedStyle(portrait).backgroundImage
     const isSpecial = subideologyName === "Spartakism" || subideologyName === "Leninism"
     const isCustomPortrait = currentBg.includes("data:image/")
-    if (isSpecial && !isCustomPortrait) {
+    const isEmpty = currentBg === "none" || currentBg === ""
+    if (isSpecial && !isCustomPortrait && !isEmpty) {
         portrait.style.backgroundImage = "url(./portraits/Polzl.png)"
     } else if (!isSpecial) {
         updatePortraitForIdeology(selectedIdeology)
